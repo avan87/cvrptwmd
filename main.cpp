@@ -185,7 +185,7 @@ namespace operations_research {
         //  void  VRPSolver (CVRPData & data)
     }
 
-    std::vector<std::vector<int64>> CVRPTWSolver::SolveCVRPTWMD(Matrix &matrix, int64 num_v,  std::vector<std::pair<RoutingModel::NodeIndex, RoutingModel::NodeIndex>> &depots){
+    std::vector<std::vector<int64>> CVRPTWSolver::SolveCVRPTWMD(Matrix &matrix, int64 num_v,  std::vector<std::pair<RoutingModel::NodeIndex, RoutingModel::NodeIndex >> &depots){
 
         std::vector<int64> result;
         std::vector<std::vector<int64>> cvrp_result;
@@ -193,6 +193,9 @@ namespace operations_research {
         int size = matrix.getSize();
 
         RoutingModel routing(size, num_v, depots);
+
+
+       // routing.SetStartEnd()
 
         routing.SetCost(NewPermanentCallback(&matrix, &Matrix::Distance));
 

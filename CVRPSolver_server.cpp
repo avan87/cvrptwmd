@@ -249,18 +249,14 @@ class CVRPSolverHandler : virtual public CVRPSolverIf {
         std::vector<std::pair<int64, int64>> timeW = utils.castToListOfPairs(timeWindows);
         std::vector<std::pair<int64, int64>> deps = utils.castToListOfPairs(depots);
 
-        std::vector<std::pair<operations_research::RoutingModel::NodeIndex, operations_research::RoutingModel::NodeIndex>> newDeps;
+        std::vector<std::pair<operations_research::RoutingModel::NodeIndex, operations_research::RoutingModel::NodeIndex>> newDeps(deps.size());
 
 
 
-        for (std::vector<std::pair<int64, int64>>::iterator it = deps.begin(); it != deps.end(); it++){
+        for ( int i = 0; i < deps.size(); i++){
 
-            RoutingModel routingModel(0,0);
-            std::pair<RoutingModel::NodeIndex, RoutingModel::NodeIndex> p;
-            p.first = routingModel.IndexToNode( it->first);
-            p.second = routingModel.IndexToNode( it->second);
 
-            newDeps.push_back(p);
+            newDeps[i] = std::make_pair(deps.at(i).first, deps.at(i).second);
 
         }
 
@@ -270,7 +266,7 @@ class CVRPSolverHandler : virtual public CVRPSolverIf {
         operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime);
         operations_research::CVRPTWSolver vrpSolver;
 
-        std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTW(matrix, veh_caps.size());
+        std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTWMD(matrix, veh_caps.size(), newDeps);
 
         for(int i=0; i< cvrp_result.size(); i++) {
 
