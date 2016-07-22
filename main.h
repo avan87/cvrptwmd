@@ -19,6 +19,9 @@ namespace operations_research {
       static  std::vector<std::vector<int64>>  SolveCVRPTW (Matrix& matrix, int64 num_v);
 
         static   std::vector<std::vector<int64>> SolveCVRPTWMD (Matrix& matrix, int64 num_v,  std::vector<pair<RoutingModel::NodeIndex, RoutingModel::NodeIndex>> &depots);
+
+
+        vector <vector<int64>> SolveCVRPTW_VP(Matrix &matrix, int64 num_v);
     };
 
 

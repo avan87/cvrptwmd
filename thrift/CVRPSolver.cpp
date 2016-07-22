@@ -553,6 +553,38 @@ uint32_t CVRPSolver_solveCVRPTW_args::read(::apache::thrift::protocol::TProtocol
           xfer += iprot->skip(ftype);
         }
         break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->vehWindows.clear();
+            uint32_t _size85;
+            ::apache::thrift::protocol::TType _etype88;
+            xfer += iprot->readListBegin(_etype88, _size85);
+            this->vehWindows.resize(_size85);
+            uint32_t _i89;
+            for (_i89 = 0; _i89 < _size85; ++_i89)
+            {
+              {
+                this->vehWindows[_i89].clear();
+                uint32_t _size90;
+                ::apache::thrift::protocol::TType _etype93;
+                xfer += iprot->readListBegin(_etype93, _size90);
+                this->vehWindows[_i89].resize(_size90);
+                uint32_t _i94;
+                for (_i94 = 0; _i94 < _size90; ++_i94)
+                {
+                  xfer += iprot->readI64(this->vehWindows[_i89][_i94]);
+                }
+                xfer += iprot->readListEnd();
+              }
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.vehWindows = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -573,15 +605,15 @@ uint32_t CVRPSolver_solveCVRPTW_args::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeFieldBegin("vec", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->vec.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter85;
-    for (_iter85 = this->vec.begin(); _iter85 != this->vec.end(); ++_iter85)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter95;
+    for (_iter95 = this->vec.begin(); _iter95 != this->vec.end(); ++_iter95)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter85).size()));
-        std::vector<int64_t> ::const_iterator _iter86;
-        for (_iter86 = (*_iter85).begin(); _iter86 != (*_iter85).end(); ++_iter86)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter95).size()));
+        std::vector<int64_t> ::const_iterator _iter96;
+        for (_iter96 = (*_iter95).begin(); _iter96 != (*_iter95).end(); ++_iter96)
         {
-          xfer += oprot->writeI64((*_iter86));
+          xfer += oprot->writeI64((*_iter96));
         }
         xfer += oprot->writeListEnd();
       }
@@ -593,10 +625,10 @@ uint32_t CVRPSolver_solveCVRPTW_args::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeFieldBegin("demands", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->demands.size()));
-    std::vector<int64_t> ::const_iterator _iter87;
-    for (_iter87 = this->demands.begin(); _iter87 != this->demands.end(); ++_iter87)
+    std::vector<int64_t> ::const_iterator _iter97;
+    for (_iter97 = this->demands.begin(); _iter97 != this->demands.end(); ++_iter97)
     {
-      xfer += oprot->writeI64((*_iter87));
+      xfer += oprot->writeI64((*_iter97));
     }
     xfer += oprot->writeListEnd();
   }
@@ -605,10 +637,10 @@ uint32_t CVRPSolver_solveCVRPTW_args::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeFieldBegin("v_caps", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->v_caps.size()));
-    std::vector<int64_t> ::const_iterator _iter88;
-    for (_iter88 = this->v_caps.begin(); _iter88 != this->v_caps.end(); ++_iter88)
+    std::vector<int64_t> ::const_iterator _iter98;
+    for (_iter98 = this->v_caps.begin(); _iter98 != this->v_caps.end(); ++_iter98)
     {
-      xfer += oprot->writeI64((*_iter88));
+      xfer += oprot->writeI64((*_iter98));
     }
     xfer += oprot->writeListEnd();
   }
@@ -617,15 +649,15 @@ uint32_t CVRPSolver_solveCVRPTW_args::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeFieldBegin("timeWindows", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->timeWindows.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter89;
-    for (_iter89 = this->timeWindows.begin(); _iter89 != this->timeWindows.end(); ++_iter89)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter99;
+    for (_iter99 = this->timeWindows.begin(); _iter99 != this->timeWindows.end(); ++_iter99)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter89).size()));
-        std::vector<int64_t> ::const_iterator _iter90;
-        for (_iter90 = (*_iter89).begin(); _iter90 != (*_iter89).end(); ++_iter90)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter99).size()));
+        std::vector<int64_t> ::const_iterator _iter100;
+        for (_iter100 = (*_iter99).begin(); _iter100 != (*_iter99).end(); ++_iter100)
         {
-          xfer += oprot->writeI64((*_iter90));
+          xfer += oprot->writeI64((*_iter100));
         }
         xfer += oprot->writeListEnd();
       }
@@ -637,10 +669,30 @@ uint32_t CVRPSolver_solveCVRPTW_args::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeFieldBegin("serviceTime", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->serviceTime.size()));
-    std::vector<int64_t> ::const_iterator _iter91;
-    for (_iter91 = this->serviceTime.begin(); _iter91 != this->serviceTime.end(); ++_iter91)
+    std::vector<int64_t> ::const_iterator _iter101;
+    for (_iter101 = this->serviceTime.begin(); _iter101 != this->serviceTime.end(); ++_iter101)
     {
-      xfer += oprot->writeI64((*_iter91));
+      xfer += oprot->writeI64((*_iter101));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vehWindows", ::apache::thrift::protocol::T_LIST, 6);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->vehWindows.size()));
+    std::vector<std::vector<int64_t> > ::const_iterator _iter102;
+    for (_iter102 = this->vehWindows.begin(); _iter102 != this->vehWindows.end(); ++_iter102)
+    {
+      {
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter102).size()));
+        std::vector<int64_t> ::const_iterator _iter103;
+        for (_iter103 = (*_iter102).begin(); _iter103 != (*_iter102).end(); ++_iter103)
+        {
+          xfer += oprot->writeI64((*_iter103));
+        }
+        xfer += oprot->writeListEnd();
+      }
     }
     xfer += oprot->writeListEnd();
   }
@@ -664,15 +716,15 @@ uint32_t CVRPSolver_solveCVRPTW_pargs::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("vec", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->vec)).size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter92;
-    for (_iter92 = (*(this->vec)).begin(); _iter92 != (*(this->vec)).end(); ++_iter92)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter104;
+    for (_iter104 = (*(this->vec)).begin(); _iter104 != (*(this->vec)).end(); ++_iter104)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter92).size()));
-        std::vector<int64_t> ::const_iterator _iter93;
-        for (_iter93 = (*_iter92).begin(); _iter93 != (*_iter92).end(); ++_iter93)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter104).size()));
+        std::vector<int64_t> ::const_iterator _iter105;
+        for (_iter105 = (*_iter104).begin(); _iter105 != (*_iter104).end(); ++_iter105)
         {
-          xfer += oprot->writeI64((*_iter93));
+          xfer += oprot->writeI64((*_iter105));
         }
         xfer += oprot->writeListEnd();
       }
@@ -684,10 +736,10 @@ uint32_t CVRPSolver_solveCVRPTW_pargs::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("demands", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->demands)).size()));
-    std::vector<int64_t> ::const_iterator _iter94;
-    for (_iter94 = (*(this->demands)).begin(); _iter94 != (*(this->demands)).end(); ++_iter94)
+    std::vector<int64_t> ::const_iterator _iter106;
+    for (_iter106 = (*(this->demands)).begin(); _iter106 != (*(this->demands)).end(); ++_iter106)
     {
-      xfer += oprot->writeI64((*_iter94));
+      xfer += oprot->writeI64((*_iter106));
     }
     xfer += oprot->writeListEnd();
   }
@@ -696,10 +748,10 @@ uint32_t CVRPSolver_solveCVRPTW_pargs::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("v_caps", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->v_caps)).size()));
-    std::vector<int64_t> ::const_iterator _iter95;
-    for (_iter95 = (*(this->v_caps)).begin(); _iter95 != (*(this->v_caps)).end(); ++_iter95)
+    std::vector<int64_t> ::const_iterator _iter107;
+    for (_iter107 = (*(this->v_caps)).begin(); _iter107 != (*(this->v_caps)).end(); ++_iter107)
     {
-      xfer += oprot->writeI64((*_iter95));
+      xfer += oprot->writeI64((*_iter107));
     }
     xfer += oprot->writeListEnd();
   }
@@ -708,15 +760,15 @@ uint32_t CVRPSolver_solveCVRPTW_pargs::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("timeWindows", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->timeWindows)).size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter96;
-    for (_iter96 = (*(this->timeWindows)).begin(); _iter96 != (*(this->timeWindows)).end(); ++_iter96)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter108;
+    for (_iter108 = (*(this->timeWindows)).begin(); _iter108 != (*(this->timeWindows)).end(); ++_iter108)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter96).size()));
-        std::vector<int64_t> ::const_iterator _iter97;
-        for (_iter97 = (*_iter96).begin(); _iter97 != (*_iter96).end(); ++_iter97)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter108).size()));
+        std::vector<int64_t> ::const_iterator _iter109;
+        for (_iter109 = (*_iter108).begin(); _iter109 != (*_iter108).end(); ++_iter109)
         {
-          xfer += oprot->writeI64((*_iter97));
+          xfer += oprot->writeI64((*_iter109));
         }
         xfer += oprot->writeListEnd();
       }
@@ -728,10 +780,30 @@ uint32_t CVRPSolver_solveCVRPTW_pargs::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("serviceTime", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->serviceTime)).size()));
-    std::vector<int64_t> ::const_iterator _iter98;
-    for (_iter98 = (*(this->serviceTime)).begin(); _iter98 != (*(this->serviceTime)).end(); ++_iter98)
+    std::vector<int64_t> ::const_iterator _iter110;
+    for (_iter110 = (*(this->serviceTime)).begin(); _iter110 != (*(this->serviceTime)).end(); ++_iter110)
     {
-      xfer += oprot->writeI64((*_iter98));
+      xfer += oprot->writeI64((*_iter110));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vehWindows", ::apache::thrift::protocol::T_LIST, 6);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->vehWindows)).size()));
+    std::vector<std::vector<int64_t> > ::const_iterator _iter111;
+    for (_iter111 = (*(this->vehWindows)).begin(); _iter111 != (*(this->vehWindows)).end(); ++_iter111)
+    {
+      {
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter111).size()));
+        std::vector<int64_t> ::const_iterator _iter112;
+        for (_iter112 = (*_iter111).begin(); _iter112 != (*_iter111).end(); ++_iter112)
+        {
+          xfer += oprot->writeI64((*_iter112));
+        }
+        xfer += oprot->writeListEnd();
+      }
     }
     xfer += oprot->writeListEnd();
   }
@@ -772,23 +844,23 @@ uint32_t CVRPSolver_solveCVRPTW_result::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size99;
-            ::apache::thrift::protocol::TType _etype102;
-            xfer += iprot->readListBegin(_etype102, _size99);
-            this->success.resize(_size99);
-            uint32_t _i103;
-            for (_i103 = 0; _i103 < _size99; ++_i103)
+            uint32_t _size113;
+            ::apache::thrift::protocol::TType _etype116;
+            xfer += iprot->readListBegin(_etype116, _size113);
+            this->success.resize(_size113);
+            uint32_t _i117;
+            for (_i117 = 0; _i117 < _size113; ++_i117)
             {
               {
-                this->success[_i103].clear();
-                uint32_t _size104;
-                ::apache::thrift::protocol::TType _etype107;
-                xfer += iprot->readListBegin(_etype107, _size104);
-                this->success[_i103].resize(_size104);
-                uint32_t _i108;
-                for (_i108 = 0; _i108 < _size104; ++_i108)
+                this->success[_i117].clear();
+                uint32_t _size118;
+                ::apache::thrift::protocol::TType _etype121;
+                xfer += iprot->readListBegin(_etype121, _size118);
+                this->success[_i117].resize(_size118);
+                uint32_t _i122;
+                for (_i122 = 0; _i122 < _size118; ++_i122)
                 {
-                  xfer += iprot->readI64(this->success[_i103][_i108]);
+                  xfer += iprot->readI64(this->success[_i117][_i122]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -822,15 +894,15 @@ uint32_t CVRPSolver_solveCVRPTW_result::write(::apache::thrift::protocol::TProto
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::vector<int64_t> > ::const_iterator _iter109;
-      for (_iter109 = this->success.begin(); _iter109 != this->success.end(); ++_iter109)
+      std::vector<std::vector<int64_t> > ::const_iterator _iter123;
+      for (_iter123 = this->success.begin(); _iter123 != this->success.end(); ++_iter123)
       {
         {
-          xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter109).size()));
-          std::vector<int64_t> ::const_iterator _iter110;
-          for (_iter110 = (*_iter109).begin(); _iter110 != (*_iter109).end(); ++_iter110)
+          xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter123).size()));
+          std::vector<int64_t> ::const_iterator _iter124;
+          for (_iter124 = (*_iter123).begin(); _iter124 != (*_iter123).end(); ++_iter124)
           {
-            xfer += oprot->writeI64((*_iter110));
+            xfer += oprot->writeI64((*_iter124));
           }
           xfer += oprot->writeListEnd();
         }
@@ -874,23 +946,23 @@ uint32_t CVRPSolver_solveCVRPTW_presult::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size111;
-            ::apache::thrift::protocol::TType _etype114;
-            xfer += iprot->readListBegin(_etype114, _size111);
-            (*(this->success)).resize(_size111);
-            uint32_t _i115;
-            for (_i115 = 0; _i115 < _size111; ++_i115)
+            uint32_t _size125;
+            ::apache::thrift::protocol::TType _etype128;
+            xfer += iprot->readListBegin(_etype128, _size125);
+            (*(this->success)).resize(_size125);
+            uint32_t _i129;
+            for (_i129 = 0; _i129 < _size125; ++_i129)
             {
               {
-                (*(this->success))[_i115].clear();
-                uint32_t _size116;
-                ::apache::thrift::protocol::TType _etype119;
-                xfer += iprot->readListBegin(_etype119, _size116);
-                (*(this->success))[_i115].resize(_size116);
-                uint32_t _i120;
-                for (_i120 = 0; _i120 < _size116; ++_i120)
+                (*(this->success))[_i129].clear();
+                uint32_t _size130;
+                ::apache::thrift::protocol::TType _etype133;
+                xfer += iprot->readListBegin(_etype133, _size130);
+                (*(this->success))[_i129].resize(_size130);
+                uint32_t _i134;
+                for (_i134 = 0; _i134 < _size130; ++_i134)
                 {
-                  xfer += iprot->readI64((*(this->success))[_i115][_i120]);
+                  xfer += iprot->readI64((*(this->success))[_i129][_i134]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -944,23 +1016,23 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->vec.clear();
-            uint32_t _size121;
-            ::apache::thrift::protocol::TType _etype124;
-            xfer += iprot->readListBegin(_etype124, _size121);
-            this->vec.resize(_size121);
-            uint32_t _i125;
-            for (_i125 = 0; _i125 < _size121; ++_i125)
+            uint32_t _size135;
+            ::apache::thrift::protocol::TType _etype138;
+            xfer += iprot->readListBegin(_etype138, _size135);
+            this->vec.resize(_size135);
+            uint32_t _i139;
+            for (_i139 = 0; _i139 < _size135; ++_i139)
             {
               {
-                this->vec[_i125].clear();
-                uint32_t _size126;
-                ::apache::thrift::protocol::TType _etype129;
-                xfer += iprot->readListBegin(_etype129, _size126);
-                this->vec[_i125].resize(_size126);
-                uint32_t _i130;
-                for (_i130 = 0; _i130 < _size126; ++_i130)
+                this->vec[_i139].clear();
+                uint32_t _size140;
+                ::apache::thrift::protocol::TType _etype143;
+                xfer += iprot->readListBegin(_etype143, _size140);
+                this->vec[_i139].resize(_size140);
+                uint32_t _i144;
+                for (_i144 = 0; _i144 < _size140; ++_i144)
                 {
-                  xfer += iprot->readI64(this->vec[_i125][_i130]);
+                  xfer += iprot->readI64(this->vec[_i139][_i144]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -976,14 +1048,14 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->demands.clear();
-            uint32_t _size131;
-            ::apache::thrift::protocol::TType _etype134;
-            xfer += iprot->readListBegin(_etype134, _size131);
-            this->demands.resize(_size131);
-            uint32_t _i135;
-            for (_i135 = 0; _i135 < _size131; ++_i135)
+            uint32_t _size145;
+            ::apache::thrift::protocol::TType _etype148;
+            xfer += iprot->readListBegin(_etype148, _size145);
+            this->demands.resize(_size145);
+            uint32_t _i149;
+            for (_i149 = 0; _i149 < _size145; ++_i149)
             {
-              xfer += iprot->readI64(this->demands[_i135]);
+              xfer += iprot->readI64(this->demands[_i149]);
             }
             xfer += iprot->readListEnd();
           }
@@ -996,14 +1068,14 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->v_caps.clear();
-            uint32_t _size136;
-            ::apache::thrift::protocol::TType _etype139;
-            xfer += iprot->readListBegin(_etype139, _size136);
-            this->v_caps.resize(_size136);
-            uint32_t _i140;
-            for (_i140 = 0; _i140 < _size136; ++_i140)
+            uint32_t _size150;
+            ::apache::thrift::protocol::TType _etype153;
+            xfer += iprot->readListBegin(_etype153, _size150);
+            this->v_caps.resize(_size150);
+            uint32_t _i154;
+            for (_i154 = 0; _i154 < _size150; ++_i154)
             {
-              xfer += iprot->readI64(this->v_caps[_i140]);
+              xfer += iprot->readI64(this->v_caps[_i154]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1016,23 +1088,23 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->timeWindows.clear();
-            uint32_t _size141;
-            ::apache::thrift::protocol::TType _etype144;
-            xfer += iprot->readListBegin(_etype144, _size141);
-            this->timeWindows.resize(_size141);
-            uint32_t _i145;
-            for (_i145 = 0; _i145 < _size141; ++_i145)
+            uint32_t _size155;
+            ::apache::thrift::protocol::TType _etype158;
+            xfer += iprot->readListBegin(_etype158, _size155);
+            this->timeWindows.resize(_size155);
+            uint32_t _i159;
+            for (_i159 = 0; _i159 < _size155; ++_i159)
             {
               {
-                this->timeWindows[_i145].clear();
-                uint32_t _size146;
-                ::apache::thrift::protocol::TType _etype149;
-                xfer += iprot->readListBegin(_etype149, _size146);
-                this->timeWindows[_i145].resize(_size146);
-                uint32_t _i150;
-                for (_i150 = 0; _i150 < _size146; ++_i150)
+                this->timeWindows[_i159].clear();
+                uint32_t _size160;
+                ::apache::thrift::protocol::TType _etype163;
+                xfer += iprot->readListBegin(_etype163, _size160);
+                this->timeWindows[_i159].resize(_size160);
+                uint32_t _i164;
+                for (_i164 = 0; _i164 < _size160; ++_i164)
                 {
-                  xfer += iprot->readI64(this->timeWindows[_i145][_i150]);
+                  xfer += iprot->readI64(this->timeWindows[_i159][_i164]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -1048,14 +1120,14 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->serviceTime.clear();
-            uint32_t _size151;
-            ::apache::thrift::protocol::TType _etype154;
-            xfer += iprot->readListBegin(_etype154, _size151);
-            this->serviceTime.resize(_size151);
-            uint32_t _i155;
-            for (_i155 = 0; _i155 < _size151; ++_i155)
+            uint32_t _size165;
+            ::apache::thrift::protocol::TType _etype168;
+            xfer += iprot->readListBegin(_etype168, _size165);
+            this->serviceTime.resize(_size165);
+            uint32_t _i169;
+            for (_i169 = 0; _i169 < _size165; ++_i169)
             {
-              xfer += iprot->readI64(this->serviceTime[_i155]);
+              xfer += iprot->readI64(this->serviceTime[_i169]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1068,23 +1140,23 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->depots.clear();
-            uint32_t _size156;
-            ::apache::thrift::protocol::TType _etype159;
-            xfer += iprot->readListBegin(_etype159, _size156);
-            this->depots.resize(_size156);
-            uint32_t _i160;
-            for (_i160 = 0; _i160 < _size156; ++_i160)
+            uint32_t _size170;
+            ::apache::thrift::protocol::TType _etype173;
+            xfer += iprot->readListBegin(_etype173, _size170);
+            this->depots.resize(_size170);
+            uint32_t _i174;
+            for (_i174 = 0; _i174 < _size170; ++_i174)
             {
               {
-                this->depots[_i160].clear();
-                uint32_t _size161;
-                ::apache::thrift::protocol::TType _etype164;
-                xfer += iprot->readListBegin(_etype164, _size161);
-                this->depots[_i160].resize(_size161);
-                uint32_t _i165;
-                for (_i165 = 0; _i165 < _size161; ++_i165)
+                this->depots[_i174].clear();
+                uint32_t _size175;
+                ::apache::thrift::protocol::TType _etype178;
+                xfer += iprot->readListBegin(_etype178, _size175);
+                this->depots[_i174].resize(_size175);
+                uint32_t _i179;
+                for (_i179 = 0; _i179 < _size175; ++_i179)
                 {
-                  xfer += iprot->readI64(this->depots[_i160][_i165]);
+                  xfer += iprot->readI64(this->depots[_i174][_i179]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -1116,15 +1188,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("vec", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->vec.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter166;
-    for (_iter166 = this->vec.begin(); _iter166 != this->vec.end(); ++_iter166)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter180;
+    for (_iter180 = this->vec.begin(); _iter180 != this->vec.end(); ++_iter180)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter166).size()));
-        std::vector<int64_t> ::const_iterator _iter167;
-        for (_iter167 = (*_iter166).begin(); _iter167 != (*_iter166).end(); ++_iter167)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter180).size()));
+        std::vector<int64_t> ::const_iterator _iter181;
+        for (_iter181 = (*_iter180).begin(); _iter181 != (*_iter180).end(); ++_iter181)
         {
-          xfer += oprot->writeI64((*_iter167));
+          xfer += oprot->writeI64((*_iter181));
         }
         xfer += oprot->writeListEnd();
       }
@@ -1136,10 +1208,10 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("demands", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->demands.size()));
-    std::vector<int64_t> ::const_iterator _iter168;
-    for (_iter168 = this->demands.begin(); _iter168 != this->demands.end(); ++_iter168)
+    std::vector<int64_t> ::const_iterator _iter182;
+    for (_iter182 = this->demands.begin(); _iter182 != this->demands.end(); ++_iter182)
     {
-      xfer += oprot->writeI64((*_iter168));
+      xfer += oprot->writeI64((*_iter182));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1148,10 +1220,10 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("v_caps", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->v_caps.size()));
-    std::vector<int64_t> ::const_iterator _iter169;
-    for (_iter169 = this->v_caps.begin(); _iter169 != this->v_caps.end(); ++_iter169)
+    std::vector<int64_t> ::const_iterator _iter183;
+    for (_iter183 = this->v_caps.begin(); _iter183 != this->v_caps.end(); ++_iter183)
     {
-      xfer += oprot->writeI64((*_iter169));
+      xfer += oprot->writeI64((*_iter183));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1160,15 +1232,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("timeWindows", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->timeWindows.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter170;
-    for (_iter170 = this->timeWindows.begin(); _iter170 != this->timeWindows.end(); ++_iter170)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter184;
+    for (_iter184 = this->timeWindows.begin(); _iter184 != this->timeWindows.end(); ++_iter184)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter170).size()));
-        std::vector<int64_t> ::const_iterator _iter171;
-        for (_iter171 = (*_iter170).begin(); _iter171 != (*_iter170).end(); ++_iter171)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter184).size()));
+        std::vector<int64_t> ::const_iterator _iter185;
+        for (_iter185 = (*_iter184).begin(); _iter185 != (*_iter184).end(); ++_iter185)
         {
-          xfer += oprot->writeI64((*_iter171));
+          xfer += oprot->writeI64((*_iter185));
         }
         xfer += oprot->writeListEnd();
       }
@@ -1180,10 +1252,10 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("serviceTime", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->serviceTime.size()));
-    std::vector<int64_t> ::const_iterator _iter172;
-    for (_iter172 = this->serviceTime.begin(); _iter172 != this->serviceTime.end(); ++_iter172)
+    std::vector<int64_t> ::const_iterator _iter186;
+    for (_iter186 = this->serviceTime.begin(); _iter186 != this->serviceTime.end(); ++_iter186)
     {
-      xfer += oprot->writeI64((*_iter172));
+      xfer += oprot->writeI64((*_iter186));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1192,15 +1264,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("depots", ::apache::thrift::protocol::T_LIST, 6);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->depots.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter173;
-    for (_iter173 = this->depots.begin(); _iter173 != this->depots.end(); ++_iter173)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter187;
+    for (_iter187 = this->depots.begin(); _iter187 != this->depots.end(); ++_iter187)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter173).size()));
-        std::vector<int64_t> ::const_iterator _iter174;
-        for (_iter174 = (*_iter173).begin(); _iter174 != (*_iter173).end(); ++_iter174)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter187).size()));
+        std::vector<int64_t> ::const_iterator _iter188;
+        for (_iter188 = (*_iter187).begin(); _iter188 != (*_iter187).end(); ++_iter188)
         {
-          xfer += oprot->writeI64((*_iter174));
+          xfer += oprot->writeI64((*_iter188));
         }
         xfer += oprot->writeListEnd();
       }
@@ -1227,15 +1299,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("vec", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->vec)).size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter175;
-    for (_iter175 = (*(this->vec)).begin(); _iter175 != (*(this->vec)).end(); ++_iter175)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter189;
+    for (_iter189 = (*(this->vec)).begin(); _iter189 != (*(this->vec)).end(); ++_iter189)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter175).size()));
-        std::vector<int64_t> ::const_iterator _iter176;
-        for (_iter176 = (*_iter175).begin(); _iter176 != (*_iter175).end(); ++_iter176)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter189).size()));
+        std::vector<int64_t> ::const_iterator _iter190;
+        for (_iter190 = (*_iter189).begin(); _iter190 != (*_iter189).end(); ++_iter190)
         {
-          xfer += oprot->writeI64((*_iter176));
+          xfer += oprot->writeI64((*_iter190));
         }
         xfer += oprot->writeListEnd();
       }
@@ -1247,10 +1319,10 @@ uint32_t CVRPSolver_solveCVRPTWMD_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("demands", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->demands)).size()));
-    std::vector<int64_t> ::const_iterator _iter177;
-    for (_iter177 = (*(this->demands)).begin(); _iter177 != (*(this->demands)).end(); ++_iter177)
+    std::vector<int64_t> ::const_iterator _iter191;
+    for (_iter191 = (*(this->demands)).begin(); _iter191 != (*(this->demands)).end(); ++_iter191)
     {
-      xfer += oprot->writeI64((*_iter177));
+      xfer += oprot->writeI64((*_iter191));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1259,10 +1331,10 @@ uint32_t CVRPSolver_solveCVRPTWMD_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("v_caps", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->v_caps)).size()));
-    std::vector<int64_t> ::const_iterator _iter178;
-    for (_iter178 = (*(this->v_caps)).begin(); _iter178 != (*(this->v_caps)).end(); ++_iter178)
+    std::vector<int64_t> ::const_iterator _iter192;
+    for (_iter192 = (*(this->v_caps)).begin(); _iter192 != (*(this->v_caps)).end(); ++_iter192)
     {
-      xfer += oprot->writeI64((*_iter178));
+      xfer += oprot->writeI64((*_iter192));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1271,15 +1343,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("timeWindows", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->timeWindows)).size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter179;
-    for (_iter179 = (*(this->timeWindows)).begin(); _iter179 != (*(this->timeWindows)).end(); ++_iter179)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter193;
+    for (_iter193 = (*(this->timeWindows)).begin(); _iter193 != (*(this->timeWindows)).end(); ++_iter193)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter179).size()));
-        std::vector<int64_t> ::const_iterator _iter180;
-        for (_iter180 = (*_iter179).begin(); _iter180 != (*_iter179).end(); ++_iter180)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter193).size()));
+        std::vector<int64_t> ::const_iterator _iter194;
+        for (_iter194 = (*_iter193).begin(); _iter194 != (*_iter193).end(); ++_iter194)
         {
-          xfer += oprot->writeI64((*_iter180));
+          xfer += oprot->writeI64((*_iter194));
         }
         xfer += oprot->writeListEnd();
       }
@@ -1291,10 +1363,10 @@ uint32_t CVRPSolver_solveCVRPTWMD_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("serviceTime", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->serviceTime)).size()));
-    std::vector<int64_t> ::const_iterator _iter181;
-    for (_iter181 = (*(this->serviceTime)).begin(); _iter181 != (*(this->serviceTime)).end(); ++_iter181)
+    std::vector<int64_t> ::const_iterator _iter195;
+    for (_iter195 = (*(this->serviceTime)).begin(); _iter195 != (*(this->serviceTime)).end(); ++_iter195)
     {
-      xfer += oprot->writeI64((*_iter181));
+      xfer += oprot->writeI64((*_iter195));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1303,15 +1375,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("depots", ::apache::thrift::protocol::T_LIST, 6);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->depots)).size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter182;
-    for (_iter182 = (*(this->depots)).begin(); _iter182 != (*(this->depots)).end(); ++_iter182)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter196;
+    for (_iter196 = (*(this->depots)).begin(); _iter196 != (*(this->depots)).end(); ++_iter196)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter182).size()));
-        std::vector<int64_t> ::const_iterator _iter183;
-        for (_iter183 = (*_iter182).begin(); _iter183 != (*_iter182).end(); ++_iter183)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter196).size()));
+        std::vector<int64_t> ::const_iterator _iter197;
+        for (_iter197 = (*_iter196).begin(); _iter197 != (*_iter196).end(); ++_iter197)
         {
-          xfer += oprot->writeI64((*_iter183));
+          xfer += oprot->writeI64((*_iter197));
         }
         xfer += oprot->writeListEnd();
       }
@@ -1355,23 +1427,23 @@ uint32_t CVRPSolver_solveCVRPTWMD_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size184;
-            ::apache::thrift::protocol::TType _etype187;
-            xfer += iprot->readListBegin(_etype187, _size184);
-            this->success.resize(_size184);
-            uint32_t _i188;
-            for (_i188 = 0; _i188 < _size184; ++_i188)
+            uint32_t _size198;
+            ::apache::thrift::protocol::TType _etype201;
+            xfer += iprot->readListBegin(_etype201, _size198);
+            this->success.resize(_size198);
+            uint32_t _i202;
+            for (_i202 = 0; _i202 < _size198; ++_i202)
             {
               {
-                this->success[_i188].clear();
-                uint32_t _size189;
-                ::apache::thrift::protocol::TType _etype192;
-                xfer += iprot->readListBegin(_etype192, _size189);
-                this->success[_i188].resize(_size189);
-                uint32_t _i193;
-                for (_i193 = 0; _i193 < _size189; ++_i193)
+                this->success[_i202].clear();
+                uint32_t _size203;
+                ::apache::thrift::protocol::TType _etype206;
+                xfer += iprot->readListBegin(_etype206, _size203);
+                this->success[_i202].resize(_size203);
+                uint32_t _i207;
+                for (_i207 = 0; _i207 < _size203; ++_i207)
                 {
-                  xfer += iprot->readI64(this->success[_i188][_i193]);
+                  xfer += iprot->readI64(this->success[_i202][_i207]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -1405,15 +1477,15 @@ uint32_t CVRPSolver_solveCVRPTWMD_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::vector<int64_t> > ::const_iterator _iter194;
-      for (_iter194 = this->success.begin(); _iter194 != this->success.end(); ++_iter194)
+      std::vector<std::vector<int64_t> > ::const_iterator _iter208;
+      for (_iter208 = this->success.begin(); _iter208 != this->success.end(); ++_iter208)
       {
         {
-          xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter194).size()));
-          std::vector<int64_t> ::const_iterator _iter195;
-          for (_iter195 = (*_iter194).begin(); _iter195 != (*_iter194).end(); ++_iter195)
+          xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter208).size()));
+          std::vector<int64_t> ::const_iterator _iter209;
+          for (_iter209 = (*_iter208).begin(); _iter209 != (*_iter208).end(); ++_iter209)
           {
-            xfer += oprot->writeI64((*_iter195));
+            xfer += oprot->writeI64((*_iter209));
           }
           xfer += oprot->writeListEnd();
         }
@@ -1457,23 +1529,23 @@ uint32_t CVRPSolver_solveCVRPTWMD_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size196;
-            ::apache::thrift::protocol::TType _etype199;
-            xfer += iprot->readListBegin(_etype199, _size196);
-            (*(this->success)).resize(_size196);
-            uint32_t _i200;
-            for (_i200 = 0; _i200 < _size196; ++_i200)
+            uint32_t _size210;
+            ::apache::thrift::protocol::TType _etype213;
+            xfer += iprot->readListBegin(_etype213, _size210);
+            (*(this->success)).resize(_size210);
+            uint32_t _i214;
+            for (_i214 = 0; _i214 < _size210; ++_i214)
             {
               {
-                (*(this->success))[_i200].clear();
-                uint32_t _size201;
-                ::apache::thrift::protocol::TType _etype204;
-                xfer += iprot->readListBegin(_etype204, _size201);
-                (*(this->success))[_i200].resize(_size201);
-                uint32_t _i205;
-                for (_i205 = 0; _i205 < _size201; ++_i205)
+                (*(this->success))[_i214].clear();
+                uint32_t _size215;
+                ::apache::thrift::protocol::TType _etype218;
+                xfer += iprot->readListBegin(_etype218, _size215);
+                (*(this->success))[_i214].resize(_size215);
+                uint32_t _i219;
+                for (_i219 = 0; _i219 < _size215; ++_i219)
                 {
-                  xfer += iprot->readI64((*(this->success))[_i200][_i205]);
+                  xfer += iprot->readI64((*(this->success))[_i214][_i219]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -1557,13 +1629,13 @@ void CVRPSolverClient::recv_solveCVRP(std::vector<std::vector<int64_t> > & _retu
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "solveCVRP failed: unknown result");
 }
 
-void CVRPSolverClient::solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime)
+void CVRPSolverClient::solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows)
 {
-  send_solveCVRPTW(vec, demands, v_caps, timeWindows, serviceTime);
+  send_solveCVRPTW(vec, demands, v_caps, timeWindows, serviceTime, vehWindows);
   recv_solveCVRPTW(_return);
 }
 
-void CVRPSolverClient::send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime)
+void CVRPSolverClient::send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("solveCVRPTW", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1574,6 +1646,7 @@ void CVRPSolverClient::send_solveCVRPTW(const std::vector<std::vector<int64_t> >
   args.v_caps = &v_caps;
   args.timeWindows = &timeWindows;
   args.serviceTime = &serviceTime;
+  args.vehWindows = &vehWindows;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1778,7 +1851,7 @@ void CVRPSolverProcessor::process_solveCVRPTW(int32_t seqid, ::apache::thrift::p
 
   CVRPSolver_solveCVRPTW_result result;
   try {
-    iface_->solveCVRPTW(result.success, args.vec, args.demands, args.v_caps, args.timeWindows, args.serviceTime);
+    iface_->solveCVRPTW(result.success, args.vec, args.demands, args.v_caps, args.timeWindows, args.serviceTime, args.vehWindows);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -1956,13 +2029,13 @@ void CVRPSolverConcurrentClient::recv_solveCVRP(std::vector<std::vector<int64_t>
   } // end while(true)
 }
 
-void CVRPSolverConcurrentClient::solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime)
+void CVRPSolverConcurrentClient::solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows)
 {
-  int32_t seqid = send_solveCVRPTW(vec, demands, v_caps, timeWindows, serviceTime);
+  int32_t seqid = send_solveCVRPTW(vec, demands, v_caps, timeWindows, serviceTime, vehWindows);
   recv_solveCVRPTW(_return, seqid);
 }
 
-int32_t CVRPSolverConcurrentClient::send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime)
+int32_t CVRPSolverConcurrentClient::send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -1974,6 +2047,7 @@ int32_t CVRPSolverConcurrentClient::send_solveCVRPTW(const std::vector<std::vect
   args.v_caps = &v_caps;
   args.timeWindows = &timeWindows;
   args.serviceTime = &serviceTime;
+  args.vehWindows = &vehWindows;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

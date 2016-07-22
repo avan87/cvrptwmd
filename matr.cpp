@@ -33,12 +33,14 @@ namespace operations_research{
 
 
 
-    Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities, std::vector<std::pair<int64, int64>> timeWindows, std::vector<int64> serviceTime )
+    Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities,
+                   std::vector<std::pair<int64, int64>> timeWindows, std::vector<int64> serviceTime,
+                   std::vector<std::pair<int64, int64>> vehWindows)
     {
         this->size = vec.size();
 
         this->matrix_.reset(new int64[size * size]);
-
+        this->vehWindows = vehWindows;
         this->dems = demands;
         this->vcaps = v_capacities;
         this->timeWindows = timeWindows;
@@ -82,7 +84,7 @@ namespace operations_research{
 
     int64 Matrix::getVehicleCapicity(int64 num){
 
-        return this->vcaps.at(num);
+            return this->vcaps.at(num);
     }
 
 
@@ -106,6 +108,10 @@ namespace operations_research{
 
     int64 Matrix::getHorizon() const {
         return this->horizon;
+    }
+
+    std::vector<std::pair<int64, int64>> Matrix::getVehTimeWindows() {
+        return this->vehWindows;
     }
 
 

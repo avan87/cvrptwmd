@@ -22,7 +22,7 @@ class CVRPSolverIf {
  public:
   virtual ~CVRPSolverIf() {}
   virtual void solveCVRP(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps) = 0;
-  virtual void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime) = 0;
+  virtual void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows) = 0;
   virtual void solveCVRPTWMD(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & depots) = 0;
 };
 
@@ -56,7 +56,7 @@ class CVRPSolverNull : virtual public CVRPSolverIf {
   void solveCVRP(std::vector<std::vector<int64_t> > & /* _return */, const std::vector<std::vector<int64_t> > & /* vec */, const std::vector<int64_t> & /* demands */, const std::vector<int64_t> & /* v_caps */) {
     return;
   }
-  void solveCVRPTW(std::vector<std::vector<int64_t> > & /* _return */, const std::vector<std::vector<int64_t> > & /* vec */, const std::vector<int64_t> & /* demands */, const std::vector<int64_t> & /* v_caps */, const std::vector<std::vector<int64_t> > & /* timeWindows */, const std::vector<int64_t> & /* serviceTime */) {
+  void solveCVRPTW(std::vector<std::vector<int64_t> > & /* _return */, const std::vector<std::vector<int64_t> > & /* vec */, const std::vector<int64_t> & /* demands */, const std::vector<int64_t> & /* v_caps */, const std::vector<std::vector<int64_t> > & /* timeWindows */, const std::vector<int64_t> & /* serviceTime */, const std::vector<std::vector<int64_t> > & /* vehWindows */) {
     return;
   }
   void solveCVRPTWMD(std::vector<std::vector<int64_t> > & /* _return */, const std::vector<std::vector<int64_t> > & /* vec */, const std::vector<int64_t> & /* demands */, const std::vector<int64_t> & /* v_caps */, const std::vector<std::vector<int64_t> > & /* timeWindows */, const std::vector<int64_t> & /* serviceTime */, const std::vector<std::vector<int64_t> > & /* depots */) {
@@ -183,12 +183,13 @@ class CVRPSolver_solveCVRP_presult {
 };
 
 typedef struct _CVRPSolver_solveCVRPTW_args__isset {
-  _CVRPSolver_solveCVRPTW_args__isset() : vec(false), demands(false), v_caps(false), timeWindows(false), serviceTime(false) {}
+  _CVRPSolver_solveCVRPTW_args__isset() : vec(false), demands(false), v_caps(false), timeWindows(false), serviceTime(false), vehWindows(false) {}
   bool vec :1;
   bool demands :1;
   bool v_caps :1;
   bool timeWindows :1;
   bool serviceTime :1;
+  bool vehWindows :1;
 } _CVRPSolver_solveCVRPTW_args__isset;
 
 class CVRPSolver_solveCVRPTW_args {
@@ -205,6 +206,7 @@ class CVRPSolver_solveCVRPTW_args {
   std::vector<int64_t>  v_caps;
   std::vector<std::vector<int64_t> >  timeWindows;
   std::vector<int64_t>  serviceTime;
+  std::vector<std::vector<int64_t> >  vehWindows;
 
   _CVRPSolver_solveCVRPTW_args__isset __isset;
 
@@ -218,6 +220,8 @@ class CVRPSolver_solveCVRPTW_args {
 
   void __set_serviceTime(const std::vector<int64_t> & val);
 
+  void __set_vehWindows(const std::vector<std::vector<int64_t> > & val);
+
   bool operator == (const CVRPSolver_solveCVRPTW_args & rhs) const
   {
     if (!(vec == rhs.vec))
@@ -229,6 +233,8 @@ class CVRPSolver_solveCVRPTW_args {
     if (!(timeWindows == rhs.timeWindows))
       return false;
     if (!(serviceTime == rhs.serviceTime))
+      return false;
+    if (!(vehWindows == rhs.vehWindows))
       return false;
     return true;
   }
@@ -254,6 +260,7 @@ class CVRPSolver_solveCVRPTW_pargs {
   const std::vector<int64_t> * v_caps;
   const std::vector<std::vector<int64_t> > * timeWindows;
   const std::vector<int64_t> * serviceTime;
+  const std::vector<std::vector<int64_t> > * vehWindows;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -481,8 +488,8 @@ class CVRPSolverClient : virtual public CVRPSolverIf {
   void solveCVRP(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps);
   void send_solveCVRP(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps);
   void recv_solveCVRP(std::vector<std::vector<int64_t> > & _return);
-  void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime);
-  void send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime);
+  void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows);
+  void send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows);
   void recv_solveCVRPTW(std::vector<std::vector<int64_t> > & _return);
   void solveCVRPTWMD(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & depots);
   void send_solveCVRPTWMD(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & depots);
@@ -549,13 +556,13 @@ class CVRPSolverMultiface : virtual public CVRPSolverIf {
     return;
   }
 
-  void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime) {
+  void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->solveCVRPTW(_return, vec, demands, v_caps, timeWindows, serviceTime);
+      ifaces_[i]->solveCVRPTW(_return, vec, demands, v_caps, timeWindows, serviceTime, vehWindows);
     }
-    ifaces_[i]->solveCVRPTW(_return, vec, demands, v_caps, timeWindows, serviceTime);
+    ifaces_[i]->solveCVRPTW(_return, vec, demands, v_caps, timeWindows, serviceTime, vehWindows);
     return;
   }
 
@@ -602,8 +609,8 @@ class CVRPSolverConcurrentClient : virtual public CVRPSolverIf {
   void solveCVRP(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps);
   int32_t send_solveCVRP(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps);
   void recv_solveCVRP(std::vector<std::vector<int64_t> > & _return, const int32_t seqid);
-  void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime);
-  int32_t send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime);
+  void solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows);
+  int32_t send_solveCVRPTW(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & vehWindows);
   void recv_solveCVRPTW(std::vector<std::vector<int64_t> > & _return, const int32_t seqid);
   void solveCVRPTWMD(std::vector<std::vector<int64_t> > & _return, const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & depots);
   int32_t send_solveCVRPTWMD(const std::vector<std::vector<int64_t> > & vec, const std::vector<int64_t> & demands, const std::vector<int64_t> & v_caps, const std::vector<std::vector<int64_t> > & timeWindows, const std::vector<int64_t> & serviceTime, const std::vector<std::vector<int64_t> > & depots);

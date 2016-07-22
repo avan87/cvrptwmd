@@ -19,6 +19,8 @@ namespace operations_research {
 
         routing.SetCost(NewPermanentCallback(&matrix, &Matrix::Distance));
 
+
+
         //routing.AddVectorDimension(&demands[0], capacity, true, "Demand"); // demands for each vector
 
 
@@ -113,7 +115,7 @@ namespace operations_research {
                                                 "Capacity");
 
         routing.AddDimension(NewPermanentCallback(&matrix, &Matrix::distancePlusServiceTime), matrix.getHorizon(),
-                             matrix.getHorizon(), true, "time");
+                             matrix.getHorizon(), false, "time");
 
         RoutingSearchParameters parameters = routing.DefaultSearchParameters();
 
@@ -122,20 +124,45 @@ namespace operations_research {
         for (RoutingModel::NodeIndex i(0); i < matrix.getSize(); ++i) {
             int64 index = routing.NodeToIndex(i);
             IntVar* const cumul_var = routing.CumulVar(index, "time");
+
             cumul_var->SetMin(matrix.getTimeWindow(i.value()).first);
             cumul_var->SetMax(matrix.getTimeWindow(i.value()).second);
         }
 
+        for(int i = 0; i < num_v; i++){
+
+            int64 startNode  = routing.Start(i);
+            IntVar* timeStartDim = routing.CumulVar(startNode, "time");
+            timeStartDim->SetMin(matrix.getVehTimeWindows().at(i).first);
+            int64 endNode = routing.End(i);
+            IntVar* timeEndDim = routing.CumulVar(endNode, "time");
+            timeEndDim->SetMax(matrix.getVehTimeWindows().at(i).second);
+
+            }
+
+     //   FirstSolutionStrategy::PARALLEL_CHEAPEST_INSERTION;
 
 
 
-        parameters.set_first_solution_strategy(FirstSolutionStrategy_Value_PATH_CHEAPEST_ARC);
+        parameters.set_first_solution_strategy(FirstSolutionStrategy::PATH_CHEAPEST_ARC);
         parameters.set_local_search_metaheuristic(LocalSearchMetaheuristic_Value_GUIDED_LOCAL_SEARCH);
-        parameters.set_lns_time_limit_ms(10 * 1000);
-        parameters.set_time_limit_ms(30 * 1000);
+        //parameters.set_lns_time_limit_ms(2 * 1000);
+        parameters.set_time_limit_ms(60 * 10 * 1000);
         parameters.set_guided_local_search_lambda_coefficient(0.1);
+        parameters.set_solution_limit(1000);
 
         std::cout << "Local search metaeuristics " << parameters.local_search_metaheuristic() << std::endl;
+
+       // routing.CumulVar(routing.Start(0), "time")
+
+
+        const int64 kPenalty = 10000000;
+        const RoutingModel::NodeIndex kFirstNodeAfterDepot(1);
+        for (RoutingModel::NodeIndex order = kFirstNodeAfterDepot;
+             order < routing.nodes(); ++order) {
+            std::vector<RoutingModel::NodeIndex> orders(1, order);
+            routing.AddDisjunction(orders, kPenalty);
+        }
 
 
         routing.CloseModelWithParameters(parameters);
@@ -214,23 +241,51 @@ namespace operations_research {
 
 
 
-        for (RoutingModel::NodeIndex i(0); i < matrix.getSize(); ++i) {
-            int64 index = routing.NodeToIndex(i);
+        for (int64 i = 0; i < matrix.getSize(); ++i) {
+            int64 index = i;
             IntVar* const cumul_var = routing.CumulVar(index, "time");
-            cumul_var->SetMin(matrix.getTimeWindow(i.value()).first);
-            cumul_var->SetMax(matrix.getTimeWindow(i.value()).second);
+            cumul_var->SetMin(matrix.getTimeWindow(i).first);
+            cumul_var->SetMax(matrix.getTimeWindow(i).second);
         }
 
+
+        for(int i = 0; i < num_v; i++){
+
+            int64 startNode  = routing.Start(i);
+            IntVar* timeStartDim = routing.CumulVar(startNode, "time");
+            timeStartDim->SetMin(matrix.getVehTimeWindows().at(i).first);
+            int64 endNode = routing.End(i);
+            IntVar* timeEndDim = routing.CumulVar(endNode, "time");
+            timeEndDim->SetMax(matrix.getVehTimeWindows().at(i).second);
+
+        }
+
+
+//        for (int64 i = 0; i < matrix.getSize(); ++i) {
+//            int64 index = i;
+//            IntVar* const cumul_var = routing.CumulVar(index, "time");
+//            cumul_var->SetMin(matrix.getTimeWindow(i).first);
+//            cumul_var->SetMax(matrix.getTimeWindow(i).second);
+//        }
 
 
 
         parameters.set_first_solution_strategy(FirstSolutionStrategy_Value_PATH_CHEAPEST_ARC);
         parameters.set_local_search_metaheuristic(LocalSearchMetaheuristic_Value_GUIDED_LOCAL_SEARCH);
-        parameters.set_lns_time_limit_ms(60 * 1000);
-        parameters.set_time_limit_ms(120 * 1000);
+        //parameters.set_lns_time_limit_ms(10 * 1000);
+       // parameters.set_time_limit_ms(30 * 1000);
+        parameters.set_solution_limit(1000);
         parameters.set_guided_local_search_lambda_coefficient(0.1);
 
         std::cout << "Local search metaeuristics " << parameters.local_search_metaheuristic() << std::endl;
+
+        const int64 kPenalty = 10000000;
+        const RoutingModel::NodeIndex kFirstNodeAfterDepot(1);
+        for (RoutingModel::NodeIndex order = kFirstNodeAfterDepot;
+             order < routing.nodes(); ++order) {
+            std::vector<RoutingModel::NodeIndex> orders(1, order);
+            routing.AddDisjunction(orders, kPenalty);
+        }
 
 
         routing.CloseModelWithParameters(parameters);
@@ -280,11 +335,104 @@ namespace operations_research {
     }
 
 
+    std::vector<std::vector<int64>>  CVRPTWSolver::SolveCVRPTW_VP(Matrix &matrix, int64 num_v) {
+
+        //cvrptw backup
+
+        std::vector<int64> result;
+        std::vector<std::vector<int64>> cvrp_result;
+
+        const int size = matrix.getSize();
+
+        RoutingModel routing(size, num_v);
+
+        routing.SetCost(NewPermanentCallback(&matrix, &Matrix::Distance));
+
+        //routing.AddVectorDimension(&demands[0], capacity, true, "Demand"); // demands for each vector
+
+
+
+        routing.AddDimensionWithVehicleCapacity(NewPermanentCallback(&matrix, &Matrix::demandForANode), 0,
+                                                NewPermanentCallback(&matrix, &Matrix::getVehicleCapicity), true,
+                                                "Capacity");
+
+        routing.AddDimension(NewPermanentCallback(&matrix, &Matrix::distancePlusServiceTime), matrix.getHorizon(),
+                             matrix.getHorizon(), true, "time");
+
+        RoutingSearchParameters parameters = routing.DefaultSearchParameters();
+
+
+
+        for (RoutingModel::NodeIndex i(0); i < matrix.getSize(); ++i) {
+            int64 index = routing.NodeToIndex(i);
+            IntVar* const cumul_var = routing.CumulVar(index, "time");
+            cumul_var->SetMin(matrix.getTimeWindow(i.value()).first);
+            cumul_var->SetMax(matrix.getTimeWindow(i.value()).second);
+        }
 
 
 
 
-}
+        parameters.set_first_solution_strategy(FirstSolutionStrategy_Value_PATH_CHEAPEST_ARC);
+        parameters.set_local_search_metaheuristic(LocalSearchMetaheuristic_Value_GUIDED_LOCAL_SEARCH);
+        parameters.set_lns_time_limit_ms(10 * 1000);
+        parameters.set_time_limit_ms(30 * 1000);
+        parameters.set_guided_local_search_lambda_coefficient(0.1);
+
+        std::cout << "Local search metaeuristics " << parameters.local_search_metaheuristic() << std::endl;
+
+
+        routing.CloseModelWithParameters(parameters);
+
+        // Forbidding empty routes (optional)
+//         for (int vehicle_nbr = 0; vehicle_nbr < num_v; ++vehicle_nbr) {
+//           IntVar* const start_var = routing.NextVar(routing.Start(vehicle_nbr));
+//           for (int64 node_index = routing.Size(); node_index < routing.Size() + routing.vehicles(); ++node_index) {
+//             start_var->RemoveValue(node_index);
+//           }
+//         }
+
+        // SOLVE          we can use different solving strategies
+        const Assignment *solution = routing.SolveWithParameters(parameters);
+
+        //const Assignment* solution = routing.Solve(routing.solver()->MakeAssignment());
+
+        // INSPECT SOLUTION
+        if (solution != NULL) {
+
+            // Solution cost.
+            std::cout << "Obj value: " << solution->ObjectiveValue() << std::endl;
+            // Inspect solution.
+            std::string route;
+            for (int vehicle_nbr = 0; vehicle_nbr < num_v; ++vehicle_nbr) {
+                route = "";
+                result.clear();
+                for (int64 node = routing.Start(vehicle_nbr); !routing.IsEnd(node);
+                     node = solution->Value(routing.NextVar(node))) {
+                    route = StrCat(route, StrCat(routing.IndexToNode(node).value(), " -> "));
+                    result.push_back(routing.IndexToNode(node).value());
+                }
+                route = StrCat(route, routing.IndexToNode(routing.End(vehicle_nbr)).value());
+                std::cout << "Route #" << vehicle_nbr + 1 << std::endl << route << std::endl;
+                cvrp_result.push_back(result);
+            }
+
+
+            return cvrp_result;
+
+        } else {
+            LG << "No solution found.";
+        }
+
+
+
+        //  void  VRPSolver (CVRPData & data)
+    }
+
+    }
+
+
+
 
 
 
@@ -351,22 +499,35 @@ bool diagonalTest(std::vector <std::vector<int64>> vec){
 //
 //    };
 //
-//    std::vector<int64> serviceTime = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+//    int constant = 300;
 //
-//    std::vector<int64> demands = {1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-//    std::vector<int64> capacities = {22, 23, 23, 23};
-//    std::vector<std::pair<operations_research::RoutingModel::NodeIndex, operations_research::RoutingModel::NodeIndex>> depots(4);
-//
-//    depots[0] = std::make_pair(0,0);
-//    depots[1] = std::make_pair(0, 14);
-//    depots[2] = std::make_pair(4, 10);
-//    depots[3] = std::make_pair(2, 111);
+//    for (int i = 0; i < timeWindows.size(); i++){
+//        int64 f = timeWindows.at(i).first;
+//        int64 s = timeWindows.at(i).second;
+//        timeWindows.at(i).first = f + constant;
+//        timeWindows.at(i).second = s + constant;
+//    }
 //
 //
-//    operations_research::Matrix matrix(vec, demands, capacities, timeWindows, serviceTime);
+//   // std::vector<int64> serviceTime = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+//    std::vector<int64> serviceTime =   {0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5};
+//
+//    std::vector<int64> demands = {0, 100,100,100,10,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+//    std::vector<int64> capacities = {22};
+//    std::vector<std::pair<operations_research::RoutingModel::NodeIndex, operations_research::RoutingModel::NodeIndex>> depots(1);
+//
+//    depots[0] = std::make_pair(0, 0);
+//    //depots[1] = std::make_pair(10, 10);
+////    depots[2] = std::make_pair(4, 10);
+////    depots[3] = std::make_pair(2, 5);
+//
+//    std::vector<std::pair<int64, int64 >> vehWindows = {{0, timeWindows.at(0).second},};
+//
+//    operations_research::Matrix matrix(vec, demands, capacities, timeWindows, serviceTime, vehWindows);
 //
 //
-//        operations_research::CVRPTWSolver::SolveCVRPTWMD(matrix, capacities.size(), depots);
+//
+//    operations_research::CVRPTWSolver::SolveCVRPTW(matrix, capacities.size());
 //
 //
 //
