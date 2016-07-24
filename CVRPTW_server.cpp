@@ -35,7 +35,7 @@ class CVRPTWHandler : virtual public CVRPTWIf {
 
 
 
-    if (data.taskType == "CVRPTW") {
+    if (data.taskType.find("CVRPTW_") != std::string::npos) {
 
       //get data from Data class
       const std::vector<std::vector<int64_t> > vec = data.vec;
@@ -90,7 +90,8 @@ class CVRPTWHandler : virtual public CVRPTWIf {
       operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime, vWindows);
       operations_research::CVRPTWSolver vrpSolver;
 
-      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTW(matrix, veh_caps.size());
+
+      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTW(matrix, veh_caps.size(), data.taskType);
       std::vector<std::vector<int64_t >> result;
 
       for(int i=0; i< cvrp_result.size(); i++) {
@@ -109,15 +110,163 @@ class CVRPTWHandler : virtual public CVRPTWIf {
 
     }
 
-    else {
+    if(data.taskType == "CVRPTWMD")  {
 
-      LG << "not implemented yet";
+      //get data from Data class
+      const std::vector<std::vector<int64_t> > vec = data.vec;
+      const std::vector<int64_t> & demands = data.demands;
+      const std::vector<int64_t> & v_caps  = data.v_caps;
+      const std::vector<std::vector<int64_t> > timeWindows = data.timeWindows;
+      const std::vector<int64_t>  serviceTime = data.serviceTime;
+      const std::vector<std::vector<int64_t> > vehWindows = data.vehWindows;
+      const std::vector<std::vector<int64_t>> depots = data.depots;
+
+      Utils utils;
+
+      int size = vec.size();
+      int demandSize  = demands.size();
+      int servTimes = serviceTime.size();
+
+      std::vector<long long int> v2 (size, 0);
+      std::vector<long long int> dem (demandSize, 0);
+      std::vector<long long int> veh_caps(v_caps.size(),0);
+      std::vector<long long int > sTime(servTimes, 0);
+
+      std::vector<std::vector<long long int>> tempVec(size, v2);
+
+      for(int i=0; i< tempVec.size(); i++) {
+        for (int j=0;j<tempVec[i].size(); j++){
+
+          tempVec[i][j] = (long long int) vec[i][j];
+        }
+      }
+
+
+      for(int i=0; i< demandSize; i++) {
+
+        dem[i] = demands[i];
+      }
+
+
+      for(int i=0; i< v_caps.size(); i++) {
+
+        veh_caps[i] = v_caps[i];
+      }
+
+
+      for(int i=0; i< servTimes; i++) {
+
+        sTime[i] = serviceTime[i] ;
+      }
+
+      std::vector<std::pair<int64, int64>> timeW = utils.castToListOfPairs(timeWindows);
+      std::vector<std::pair<int64, int64>> vWindows = utils.castToListOfPairs(vehWindows);
+      std::vector<std::pair<int64, int64>> deps  = utils.castToListOfPairs(depots);
+
+
+      operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime, vWindows, deps);
+      operations_research::CVRPTWSolver vrpSolver;
+
+      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTWMD(matrix, veh_caps.size());
+      std::vector<std::vector<int64_t >> result;
+
+      for(int i=0; i< cvrp_result.size(); i++) {
+
+        result.push_back(std::vector<int64_t>(0,0));
+        for (int j = 0; j < cvrp_result[i].size(); j++){
+
+          result[i].push_back((int64_t) cvrp_result[i][j]);
+        }
+      }
+
+
+      _return.__set_result(result);
+
+      printf("solveCVRPTW\n");
+
+    }
+
+
+
+    if(data.taskType == "CvrptwBestSolution"){
+
+      //get data from Data class
+      const std::vector<std::vector<int64_t> > vec = data.vec;
+      const std::vector<int64_t> & demands = data.demands;
+      const std::vector<int64_t> & v_caps  = data.v_caps;
+      const std::vector<std::vector<int64_t> > timeWindows = data.timeWindows;
+      const std::vector<int64_t>  serviceTime = data.serviceTime;
+      const std::vector<std::vector<int64_t> > vehWindows = data.vehWindows;
+
+      Utils utils;
+
+      int size = vec.size();
+      int demandSize  = demands.size();
+      int servTimes = serviceTime.size();
+
+      std::vector<long long int> v2 (size, 0);
+      std::vector<long long int> dem (demandSize, 0);
+      std::vector<long long int> veh_caps(v_caps.size(),0);
+      std::vector<long long int > sTime(servTimes, 0);
+
+      std::vector<std::vector<long long int>> tempVec(size, v2);
+
+      for(int i=0; i< tempVec.size(); i++) {
+        for (int j=0;j<tempVec[i].size(); j++){
+
+          tempVec[i][j] = (long long int) vec[i][j];
+        }
+      }
+
+
+      for(int i=0; i< demandSize; i++) {
+
+        dem[i] = demands[i];
+      }
+
+
+      for(int i=0; i< v_caps.size(); i++) {
+
+        veh_caps[i] = v_caps[i];
+      }
+
+
+      for(int i=0; i< servTimes; i++) {
+
+        sTime[i] = serviceTime[i] ;
+      }
+
+      std::vector<std::pair<int64, int64>> timeW = utils.castToListOfPairs(timeWindows);
+      std::vector<std::pair<int64, int64>> vWindows = utils.castToListOfPairs(vehWindows);
+
+
+      operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime, vWindows);
+      operations_research::CVRPTWSolver vrpSolver;
+
+
+      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTW_Best_Solution(matrix, veh_caps.size());
+      std::vector<std::vector<int64_t >> result;
+
+      for(int i=0; i< cvrp_result.size(); i++) {
+
+        result.push_back(std::vector<int64_t>(0,0));
+        for (int j = 0; j < cvrp_result[i].size(); j++){
+
+          result[i].push_back((int64_t) cvrp_result[i][j]);
+        }
+      }
+
+
+      _return.__set_result(result);
+
+      printf("solveCVRPTW\n");
+
     }
 
 
 
 
-    printf("solveCVRPTW\n");
+
   }
 
 };

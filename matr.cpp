@@ -63,6 +63,46 @@ namespace operations_research{
     }
 
 
+
+    Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities, std::vector<std::pair<int64, int64>> timeWindows,
+            std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows , std::vector<std::pair<int64, int64>> depots){
+
+        this->size = vec.size();
+
+        this->matrix_.reset(new int64[size * size]);
+        this->vehWindows = vehWindows;
+        this->dems = demands;
+        this->vcaps = v_capacities;
+        this->timeWindows = timeWindows;
+        this->serviceTime = serviceTime;
+
+        this->horizon = this->timeWindows.at(0).second;
+
+
+        for (RoutingModel::NodeIndex from = RoutingModel::kFirstNode; from < size;
+             ++from) {
+            for (RoutingModel::NodeIndex to = RoutingModel::kFirstNode; to < size;
+                 ++to) {
+                if (to != from) {
+                    matrix_[MatrixIndex(from, to)] = vec[from.value()][to.value()];
+                } else {
+                    matrix_[MatrixIndex(from, to)] = 0LL;
+                }
+            }
+        }
+
+
+       for(int  i = 0; i < depots.size(); ++i){
+           RoutingModel::NodeIndex start(depots.at(i).first);
+           RoutingModel::NodeIndex end(depots.at(i).second);
+
+           this->depots.push_back(std::make_pair(start, end));
+       }
+
+
+    }
+
+
     int64 Matrix::Distance(RoutingModel::NodeIndex from, RoutingModel::NodeIndex to) const{
         return matrix_[MatrixIndex(from, to)];
     }

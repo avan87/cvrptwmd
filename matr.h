@@ -23,6 +23,10 @@ namespace operations_research  {
         Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities, std::vector<std::pair<int64, int64>> timeWindows,
                std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows );
 
+
+        Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities, std::vector<std::pair<int64, int64>> timeWindows,
+               std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows , std::vector<std::pair<int64,int64>> depots);
+
         int64 Distance(RoutingModel::NodeIndex from, RoutingModel::NodeIndex to) const;
 
         int getSize()const;
@@ -39,6 +43,10 @@ namespace operations_research  {
 
         int64 distancePlusServiceTime(RoutingModel::NodeIndex from, RoutingModel::NodeIndex to);
 
+
+        const vector<pair<RoutingModel::NodeIndex, RoutingModel::NodeIndex>> &getDepots() const {
+            return depots;
+        }
 
         int64 getHorizon() const ;
 
