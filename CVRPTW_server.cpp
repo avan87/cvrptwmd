@@ -90,9 +90,18 @@ class CVRPTWHandler : virtual public CVRPTWIf {
       operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime, vWindows);
       operations_research::CVRPTWSolver vrpSolver;
 
+      std::vector<std::vector<int64>> cvrp_result;
 
-      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTW(matrix, veh_caps.size(), data.taskType);
-      std::vector<std::vector<int64_t >> result;
+      if(matrix.getDemands().size() <= 100){
+         cvrp_result = vrpSolver.SolveCVRPTW(matrix, veh_caps.size(), data.taskType, 90 * 1000);
+      }
+
+      if(matrix.getDemands().size()  > 100) {
+         cvrp_result = vrpSolver.SolveCVRPTW(matrix, veh_caps.size(), data.taskType,
+                                                                            (int64) (matrix.getDemands().size() / 100) * 60 *
+                                                                            1000);
+      }
+        std::vector<std::vector<int64_t >> result;
 
       for(int i=0; i< cvrp_result.size(); i++) {
 
