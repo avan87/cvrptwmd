@@ -24,8 +24,11 @@ namespace operations_research {
 
         static std::vector<std::vector<int64>> SolveCVRPTW_Best_Solution(Matrix& matrix, int64 num_v);
 
-        static   std::vector<std::vector<int64>> SolveCVRPTWMD (Matrix& matrix, int64 num_v);
+        static   std::vector<std::vector<int64>> SolveCVRPTWMD (Matrix& matrix, int64 num_v, std::string meta_euristic, int64 time);
 
+        static std::vector<std::vector<int64>> SolveCVRPTWPnD (Matrix& matrix, int64 num_v, std::string meta_euristic, int64 time);
+
+        static std::vector<std::vector<int64>> SolveCVRPTWBackHauls(Matrix& matrix, int64 num_v, std::string meta_euristic, int64 time);
 
         vector <vector<int64>> SolveCVRPTW_VP(Matrix &matrix, int64 num_v);
     };

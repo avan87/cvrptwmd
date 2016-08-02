@@ -24,7 +24,7 @@ class CVRPTWData;
 class Result;
 
 typedef struct _CVRPTWData__isset {
-  _CVRPTWData__isset() : vec(false), demands(false), v_caps(false), timeWindows(false), serviceTime(false), vehWindows(false), depots(false), deliveries(false), pickups(false), taskType(false) {}
+  _CVRPTWData__isset() : vec(false), demands(false), v_caps(false), timeWindows(false), serviceTime(false), vehWindows(false), depots(false), taskType(false) {}
   bool vec :1;
   bool demands :1;
   bool v_caps :1;
@@ -32,8 +32,6 @@ typedef struct _CVRPTWData__isset {
   bool serviceTime :1;
   bool vehWindows :1;
   bool depots :1;
-  bool deliveries :1;
-  bool pickups :1;
   bool taskType :1;
 } _CVRPTWData__isset;
 
@@ -53,8 +51,6 @@ class CVRPTWData {
   std::vector<int64_t>  serviceTime;
   std::vector<std::vector<int64_t> >  vehWindows;
   std::vector<std::vector<int64_t> >  depots;
-  std::vector<int64_t>  deliveries;
-  std::vector<int64_t>  pickups;
   std::string taskType;
 
   _CVRPTWData__isset __isset;
@@ -73,10 +69,6 @@ class CVRPTWData {
 
   void __set_depots(const std::vector<std::vector<int64_t> > & val);
 
-  void __set_deliveries(const std::vector<int64_t> & val);
-
-  void __set_pickups(const std::vector<int64_t> & val);
-
   void __set_taskType(const std::string& val);
 
   bool operator == (const CVRPTWData & rhs) const
@@ -94,10 +86,6 @@ class CVRPTWData {
     if (!(vehWindows == rhs.vehWindows))
       return false;
     if (!(depots == rhs.depots))
-      return false;
-    if (!(deliveries == rhs.deliveries))
-      return false;
-    if (!(pickups == rhs.pickups))
       return false;
     if (!(taskType == rhs.taskType))
       return false;

@@ -24,8 +24,15 @@ namespace operations_research  {
                std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows );
 
 
-        Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities, std::vector<std::pair<int64, int64>> timeWindows,
+        Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities,
+               std::vector<std::pair<int64, int64>> timeWindows,
                std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows , std::vector<std::pair<int64,int64>> depots);
+
+       Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities,
+              std::vector<std::pair<int64, int64>> timeWindows,
+              std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows,
+              std::vector<int64> deliveries, std::vector<int64> pickups
+       );
 
         int64 Distance(RoutingModel::NodeIndex from, RoutingModel::NodeIndex to) const;
 
@@ -49,6 +56,14 @@ namespace operations_research  {
         }
 
         int64 getHorizon() const ;
+
+        const vector<int64> &getDeliveries() const {
+            return deliveries;
+        }
+
+        const vector<int64> &getPickups() const {
+            return pickups;
+        }
 
         std::vector<std::pair<int64, int64>> getVehTimeWindows();
 
@@ -75,6 +90,10 @@ namespace operations_research  {
         int64 horizon;
 
         std::vector<pair<RoutingModel::NodeIndex , RoutingModel::NodeIndex>> depots;
+
+        std::vector<int64> deliveries;
+
+        std::vector<int64> pickups;
 
 
 
