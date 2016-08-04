@@ -24,13 +24,17 @@ class CVRPTWData;
 class Result;
 
 typedef struct _CVRPTWData__isset {
-  _CVRPTWData__isset() : vec(false), demands(false), v_caps(false), timeWindows(false), serviceTime(false), vehWindows(false) {}
+  _CVRPTWData__isset() : vec(false), demands(false), v_caps(false), timeWindows(false), serviceTime(false), vehWindows(false), depots(false), deliveries(false), pickups(false), taskType(false) {}
   bool vec :1;
   bool demands :1;
   bool v_caps :1;
   bool timeWindows :1;
   bool serviceTime :1;
   bool vehWindows :1;
+  bool depots :1;
+  bool deliveries :1;
+  bool pickups :1;
+  bool taskType :1;
 } _CVRPTWData__isset;
 
 class CVRPTWData {
@@ -38,7 +42,7 @@ class CVRPTWData {
 
   CVRPTWData(const CVRPTWData&);
   CVRPTWData& operator=(const CVRPTWData&);
-  CVRPTWData() {
+  CVRPTWData() : taskType() {
   }
 
   virtual ~CVRPTWData() throw();
@@ -48,6 +52,10 @@ class CVRPTWData {
   std::vector<std::vector<int64_t> >  timeWindows;
   std::vector<int64_t>  serviceTime;
   std::vector<std::vector<int64_t> >  vehWindows;
+  std::vector<std::vector<int64_t> >  depots;
+  std::vector<int64_t>  deliveries;
+  std::vector<int64_t>  pickups;
+  std::string taskType;
 
   _CVRPTWData__isset __isset;
 
@@ -63,6 +71,14 @@ class CVRPTWData {
 
   void __set_vehWindows(const std::vector<std::vector<int64_t> > & val);
 
+  void __set_depots(const std::vector<std::vector<int64_t> > & val);
+
+  void __set_deliveries(const std::vector<int64_t> & val);
+
+  void __set_pickups(const std::vector<int64_t> & val);
+
+  void __set_taskType(const std::string& val);
+
   bool operator == (const CVRPTWData & rhs) const
   {
     if (!(vec == rhs.vec))
@@ -76,6 +92,14 @@ class CVRPTWData {
     if (!(serviceTime == rhs.serviceTime))
       return false;
     if (!(vehWindows == rhs.vehWindows))
+      return false;
+    if (!(depots == rhs.depots))
+      return false;
+    if (!(deliveries == rhs.deliveries))
+      return false;
+    if (!(pickups == rhs.pickups))
+      return false;
+    if (!(taskType == rhs.taskType))
       return false;
     return true;
   }
@@ -100,8 +124,7 @@ inline std::ostream& operator<<(std::ostream& out, const CVRPTWData& obj)
 }
 
 typedef struct _Result__isset {
-  _Result__isset() : objValue(false), result(false) {}
-  bool objValue :1;
+  _Result__isset() : result(false) {}
   bool result :1;
 } _Result__isset;
 
@@ -110,23 +133,18 @@ class Result {
 
   Result(const Result&);
   Result& operator=(const Result&);
-  Result() : objValue(0) {
+  Result() {
   }
 
   virtual ~Result() throw();
-  int64_t objValue;
   std::vector<std::vector<int64_t> >  result;
 
   _Result__isset __isset;
-
-  void __set_objValue(const int64_t val);
 
   void __set_result(const std::vector<std::vector<int64_t> > & val);
 
   bool operator == (const Result & rhs) const
   {
-    if (!(objValue == rhs.objValue))
-      return false;
     if (!(result == rhs.result))
       return false;
     return true;

@@ -42,6 +42,22 @@ void CVRPTWData::__set_vehWindows(const std::vector<std::vector<int64_t> > & val
   this->vehWindows = val;
 }
 
+void CVRPTWData::__set_depots(const std::vector<std::vector<int64_t> > & val) {
+  this->depots = val;
+}
+
+void CVRPTWData::__set_deliveries(const std::vector<int64_t> & val) {
+  this->deliveries = val;
+}
+
+void CVRPTWData::__set_pickups(const std::vector<int64_t> & val) {
+  this->pickups = val;
+}
+
+void CVRPTWData::__set_taskType(const std::string& val) {
+  this->taskType = val;
+}
+
 uint32_t CVRPTWData::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
@@ -219,6 +235,86 @@ uint32_t CVRPTWData::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->depots.clear();
+            uint32_t _size45;
+            ::apache::thrift::protocol::TType _etype48;
+            xfer += iprot->readListBegin(_etype48, _size45);
+            this->depots.resize(_size45);
+            uint32_t _i49;
+            for (_i49 = 0; _i49 < _size45; ++_i49)
+            {
+              {
+                this->depots[_i49].clear();
+                uint32_t _size50;
+                ::apache::thrift::protocol::TType _etype53;
+                xfer += iprot->readListBegin(_etype53, _size50);
+                this->depots[_i49].resize(_size50);
+                uint32_t _i54;
+                for (_i54 = 0; _i54 < _size50; ++_i54)
+                {
+                  xfer += iprot->readI64(this->depots[_i49][_i54]);
+                }
+                xfer += iprot->readListEnd();
+              }
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.depots = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->deliveries.clear();
+            uint32_t _size55;
+            ::apache::thrift::protocol::TType _etype58;
+            xfer += iprot->readListBegin(_etype58, _size55);
+            this->deliveries.resize(_size55);
+            uint32_t _i59;
+            for (_i59 = 0; _i59 < _size55; ++_i59)
+            {
+              xfer += iprot->readI64(this->deliveries[_i59]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.deliveries = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->pickups.clear();
+            uint32_t _size60;
+            ::apache::thrift::protocol::TType _etype63;
+            xfer += iprot->readListBegin(_etype63, _size60);
+            this->pickups.resize(_size60);
+            uint32_t _i64;
+            for (_i64 = 0; _i64 < _size60; ++_i64)
+            {
+              xfer += iprot->readI64(this->pickups[_i64]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.pickups = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 10:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->taskType);
+          this->__isset.taskType = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -239,15 +335,15 @@ uint32_t CVRPTWData::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("vec", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->vec.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter45;
-    for (_iter45 = this->vec.begin(); _iter45 != this->vec.end(); ++_iter45)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter65;
+    for (_iter65 = this->vec.begin(); _iter65 != this->vec.end(); ++_iter65)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter45).size()));
-        std::vector<int64_t> ::const_iterator _iter46;
-        for (_iter46 = (*_iter45).begin(); _iter46 != (*_iter45).end(); ++_iter46)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter65).size()));
+        std::vector<int64_t> ::const_iterator _iter66;
+        for (_iter66 = (*_iter65).begin(); _iter66 != (*_iter65).end(); ++_iter66)
         {
-          xfer += oprot->writeI64((*_iter46));
+          xfer += oprot->writeI64((*_iter66));
         }
         xfer += oprot->writeListEnd();
       }
@@ -259,10 +355,10 @@ uint32_t CVRPTWData::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("demands", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->demands.size()));
-    std::vector<int64_t> ::const_iterator _iter47;
-    for (_iter47 = this->demands.begin(); _iter47 != this->demands.end(); ++_iter47)
+    std::vector<int64_t> ::const_iterator _iter67;
+    for (_iter67 = this->demands.begin(); _iter67 != this->demands.end(); ++_iter67)
     {
-      xfer += oprot->writeI64((*_iter47));
+      xfer += oprot->writeI64((*_iter67));
     }
     xfer += oprot->writeListEnd();
   }
@@ -271,10 +367,10 @@ uint32_t CVRPTWData::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("v_caps", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->v_caps.size()));
-    std::vector<int64_t> ::const_iterator _iter48;
-    for (_iter48 = this->v_caps.begin(); _iter48 != this->v_caps.end(); ++_iter48)
+    std::vector<int64_t> ::const_iterator _iter68;
+    for (_iter68 = this->v_caps.begin(); _iter68 != this->v_caps.end(); ++_iter68)
     {
-      xfer += oprot->writeI64((*_iter48));
+      xfer += oprot->writeI64((*_iter68));
     }
     xfer += oprot->writeListEnd();
   }
@@ -283,15 +379,15 @@ uint32_t CVRPTWData::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("timeWindows", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->timeWindows.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter49;
-    for (_iter49 = this->timeWindows.begin(); _iter49 != this->timeWindows.end(); ++_iter49)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter69;
+    for (_iter69 = this->timeWindows.begin(); _iter69 != this->timeWindows.end(); ++_iter69)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter49).size()));
-        std::vector<int64_t> ::const_iterator _iter50;
-        for (_iter50 = (*_iter49).begin(); _iter50 != (*_iter49).end(); ++_iter50)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter69).size()));
+        std::vector<int64_t> ::const_iterator _iter70;
+        for (_iter70 = (*_iter69).begin(); _iter70 != (*_iter69).end(); ++_iter70)
         {
-          xfer += oprot->writeI64((*_iter50));
+          xfer += oprot->writeI64((*_iter70));
         }
         xfer += oprot->writeListEnd();
       }
@@ -303,10 +399,10 @@ uint32_t CVRPTWData::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("serviceTime", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->serviceTime.size()));
-    std::vector<int64_t> ::const_iterator _iter51;
-    for (_iter51 = this->serviceTime.begin(); _iter51 != this->serviceTime.end(); ++_iter51)
+    std::vector<int64_t> ::const_iterator _iter71;
+    for (_iter71 = this->serviceTime.begin(); _iter71 != this->serviceTime.end(); ++_iter71)
     {
-      xfer += oprot->writeI64((*_iter51));
+      xfer += oprot->writeI64((*_iter71));
     }
     xfer += oprot->writeListEnd();
   }
@@ -315,21 +411,69 @@ uint32_t CVRPTWData::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("vehWindows", ::apache::thrift::protocol::T_LIST, 6);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->vehWindows.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter52;
-    for (_iter52 = this->vehWindows.begin(); _iter52 != this->vehWindows.end(); ++_iter52)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter72;
+    for (_iter72 = this->vehWindows.begin(); _iter72 != this->vehWindows.end(); ++_iter72)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter52).size()));
-        std::vector<int64_t> ::const_iterator _iter53;
-        for (_iter53 = (*_iter52).begin(); _iter53 != (*_iter52).end(); ++_iter53)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter72).size()));
+        std::vector<int64_t> ::const_iterator _iter73;
+        for (_iter73 = (*_iter72).begin(); _iter73 != (*_iter72).end(); ++_iter73)
         {
-          xfer += oprot->writeI64((*_iter53));
+          xfer += oprot->writeI64((*_iter73));
         }
         xfer += oprot->writeListEnd();
       }
     }
     xfer += oprot->writeListEnd();
   }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("depots", ::apache::thrift::protocol::T_LIST, 7);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->depots.size()));
+    std::vector<std::vector<int64_t> > ::const_iterator _iter74;
+    for (_iter74 = this->depots.begin(); _iter74 != this->depots.end(); ++_iter74)
+    {
+      {
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter74).size()));
+        std::vector<int64_t> ::const_iterator _iter75;
+        for (_iter75 = (*_iter74).begin(); _iter75 != (*_iter74).end(); ++_iter75)
+        {
+          xfer += oprot->writeI64((*_iter75));
+        }
+        xfer += oprot->writeListEnd();
+      }
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("deliveries", ::apache::thrift::protocol::T_LIST, 8);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->deliveries.size()));
+    std::vector<int64_t> ::const_iterator _iter76;
+    for (_iter76 = this->deliveries.begin(); _iter76 != this->deliveries.end(); ++_iter76)
+    {
+      xfer += oprot->writeI64((*_iter76));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pickups", ::apache::thrift::protocol::T_LIST, 9);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->pickups.size()));
+    std::vector<int64_t> ::const_iterator _iter77;
+    for (_iter77 = this->pickups.begin(); _iter77 != this->pickups.end(); ++_iter77)
+    {
+      xfer += oprot->writeI64((*_iter77));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("taskType", ::apache::thrift::protocol::T_STRING, 10);
+  xfer += oprot->writeString(this->taskType);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -345,26 +489,38 @@ void swap(CVRPTWData &a, CVRPTWData &b) {
   swap(a.timeWindows, b.timeWindows);
   swap(a.serviceTime, b.serviceTime);
   swap(a.vehWindows, b.vehWindows);
+  swap(a.depots, b.depots);
+  swap(a.deliveries, b.deliveries);
+  swap(a.pickups, b.pickups);
+  swap(a.taskType, b.taskType);
   swap(a.__isset, b.__isset);
 }
 
-CVRPTWData::CVRPTWData(const CVRPTWData& other54) {
-  vec = other54.vec;
-  demands = other54.demands;
-  v_caps = other54.v_caps;
-  timeWindows = other54.timeWindows;
-  serviceTime = other54.serviceTime;
-  vehWindows = other54.vehWindows;
-  __isset = other54.__isset;
+CVRPTWData::CVRPTWData(const CVRPTWData& other78) {
+  vec = other78.vec;
+  demands = other78.demands;
+  v_caps = other78.v_caps;
+  timeWindows = other78.timeWindows;
+  serviceTime = other78.serviceTime;
+  vehWindows = other78.vehWindows;
+  depots = other78.depots;
+  deliveries = other78.deliveries;
+  pickups = other78.pickups;
+  taskType = other78.taskType;
+  __isset = other78.__isset;
 }
-CVRPTWData& CVRPTWData::operator=(const CVRPTWData& other55) {
-  vec = other55.vec;
-  demands = other55.demands;
-  v_caps = other55.v_caps;
-  timeWindows = other55.timeWindows;
-  serviceTime = other55.serviceTime;
-  vehWindows = other55.vehWindows;
-  __isset = other55.__isset;
+CVRPTWData& CVRPTWData::operator=(const CVRPTWData& other79) {
+  vec = other79.vec;
+  demands = other79.demands;
+  v_caps = other79.v_caps;
+  timeWindows = other79.timeWindows;
+  serviceTime = other79.serviceTime;
+  vehWindows = other79.vehWindows;
+  depots = other79.depots;
+  deliveries = other79.deliveries;
+  pickups = other79.pickups;
+  taskType = other79.taskType;
+  __isset = other79.__isset;
   return *this;
 }
 void CVRPTWData::printTo(std::ostream& out) const {
@@ -376,6 +532,10 @@ void CVRPTWData::printTo(std::ostream& out) const {
   out << ", " << "timeWindows=" << to_string(timeWindows);
   out << ", " << "serviceTime=" << to_string(serviceTime);
   out << ", " << "vehWindows=" << to_string(vehWindows);
+  out << ", " << "depots=" << to_string(depots);
+  out << ", " << "deliveries=" << to_string(deliveries);
+  out << ", " << "pickups=" << to_string(pickups);
+  out << ", " << "taskType=" << to_string(taskType);
   out << ")";
 }
 
@@ -383,10 +543,6 @@ void CVRPTWData::printTo(std::ostream& out) const {
 Result::~Result() throw() {
 }
 
-
-void Result::__set_objValue(const int64_t val) {
-  this->objValue = val;
-}
 
 void Result::__set_result(const std::vector<std::vector<int64_t> > & val) {
   this->result = val;
@@ -414,34 +570,26 @@ uint32_t Result::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->objValue);
-          this->__isset.objValue = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->result.clear();
-            uint32_t _size56;
-            ::apache::thrift::protocol::TType _etype59;
-            xfer += iprot->readListBegin(_etype59, _size56);
-            this->result.resize(_size56);
-            uint32_t _i60;
-            for (_i60 = 0; _i60 < _size56; ++_i60)
+            uint32_t _size80;
+            ::apache::thrift::protocol::TType _etype83;
+            xfer += iprot->readListBegin(_etype83, _size80);
+            this->result.resize(_size80);
+            uint32_t _i84;
+            for (_i84 = 0; _i84 < _size80; ++_i84)
             {
               {
-                this->result[_i60].clear();
-                uint32_t _size61;
-                ::apache::thrift::protocol::TType _etype64;
-                xfer += iprot->readListBegin(_etype64, _size61);
-                this->result[_i60].resize(_size61);
-                uint32_t _i65;
-                for (_i65 = 0; _i65 < _size61; ++_i65)
+                this->result[_i84].clear();
+                uint32_t _size85;
+                ::apache::thrift::protocol::TType _etype88;
+                xfer += iprot->readListBegin(_etype88, _size85);
+                this->result[_i84].resize(_size85);
+                uint32_t _i89;
+                for (_i89 = 0; _i89 < _size85; ++_i89)
                 {
-                  xfer += iprot->readI64(this->result[_i60][_i65]);
+                  xfer += iprot->readI64(this->result[_i84][_i89]);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -470,22 +618,18 @@ uint32_t Result::write(::apache::thrift::protocol::TProtocol* oprot) const {
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("Result");
 
-  xfer += oprot->writeFieldBegin("objValue", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->objValue);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("result", ::apache::thrift::protocol::T_LIST, 2);
+  xfer += oprot->writeFieldBegin("result", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->result.size()));
-    std::vector<std::vector<int64_t> > ::const_iterator _iter66;
-    for (_iter66 = this->result.begin(); _iter66 != this->result.end(); ++_iter66)
+    std::vector<std::vector<int64_t> > ::const_iterator _iter90;
+    for (_iter90 = this->result.begin(); _iter90 != this->result.end(); ++_iter90)
     {
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter66).size()));
-        std::vector<int64_t> ::const_iterator _iter67;
-        for (_iter67 = (*_iter66).begin(); _iter67 != (*_iter66).end(); ++_iter67)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*_iter90).size()));
+        std::vector<int64_t> ::const_iterator _iter91;
+        for (_iter91 = (*_iter90).begin(); _iter91 != (*_iter90).end(); ++_iter91)
         {
-          xfer += oprot->writeI64((*_iter67));
+          xfer += oprot->writeI64((*_iter91));
         }
         xfer += oprot->writeListEnd();
       }
@@ -501,27 +645,23 @@ uint32_t Result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
 void swap(Result &a, Result &b) {
   using ::std::swap;
-  swap(a.objValue, b.objValue);
   swap(a.result, b.result);
   swap(a.__isset, b.__isset);
 }
 
-Result::Result(const Result& other68) {
-  objValue = other68.objValue;
-  result = other68.result;
-  __isset = other68.__isset;
+Result::Result(const Result& other92) {
+  result = other92.result;
+  __isset = other92.__isset;
 }
-Result& Result::operator=(const Result& other69) {
-  objValue = other69.objValue;
-  result = other69.result;
-  __isset = other69.__isset;
+Result& Result::operator=(const Result& other93) {
+  result = other93.result;
+  __isset = other93.__isset;
   return *this;
 }
 void Result::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "Result(";
-  out << "objValue=" << to_string(objValue);
-  out << ", " << "result=" << to_string(result);
+  out << "result=" << to_string(result);
   out << ")";
 }
 

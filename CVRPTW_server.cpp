@@ -21,8 +21,6 @@ using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 using namespace apache::thrift::concurrency;
-
-
 using boost::shared_ptr;
 
 class CVRPTWHandler : virtual public CVRPTWIf {
@@ -345,21 +343,24 @@ class CVRPTWHandler : virtual public CVRPTWIf {
 
 
       _return.__set_result(result);
-
-
-
     }
-
-
-
-
     printf("solveCVRPTW\n");
+  }
+
+
+
+
+
+  void ping(std::string& _return) {
+
+
+
+    printf("ping\n");
   }
 
 };
 
 int main(int argc, char **argv) {
-
   int port = 9090;
 
   shared_ptr<CVRPTWHandler> handler(new CVRPTWHandler());
@@ -374,9 +375,6 @@ int main(int argc, char **argv) {
   TNonblockingServer server(processor, protocolFactory, port, threadManager);
   std::cout << "listening..." << std::endl;
   server.serve();
-
-
-
   return 0;
 }
 

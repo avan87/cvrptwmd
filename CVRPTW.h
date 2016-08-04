@@ -22,6 +22,7 @@ class CVRPTWIf {
  public:
   virtual ~CVRPTWIf() {}
   virtual void solveCVRPTW(Result& _return, const CVRPTWData& data) = 0;
+  virtual void ping(std::string& _return) = 0;
 };
 
 class CVRPTWIfFactory {
@@ -52,6 +53,9 @@ class CVRPTWNull : virtual public CVRPTWIf {
  public:
   virtual ~CVRPTWNull() {}
   void solveCVRPTW(Result& /* _return */, const CVRPTWData& /* data */) {
+    return;
+  }
+  void ping(std::string& /* _return */) {
     return;
   }
 };
@@ -160,6 +164,98 @@ class CVRPTW_solveCVRPTW_presult {
 
 };
 
+
+class CVRPTW_ping_args {
+ public:
+
+  CVRPTW_ping_args(const CVRPTW_ping_args&);
+  CVRPTW_ping_args& operator=(const CVRPTW_ping_args&);
+  CVRPTW_ping_args() {
+  }
+
+  virtual ~CVRPTW_ping_args() throw();
+
+  bool operator == (const CVRPTW_ping_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const CVRPTW_ping_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const CVRPTW_ping_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class CVRPTW_ping_pargs {
+ public:
+
+
+  virtual ~CVRPTW_ping_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _CVRPTW_ping_result__isset {
+  _CVRPTW_ping_result__isset() : success(false) {}
+  bool success :1;
+} _CVRPTW_ping_result__isset;
+
+class CVRPTW_ping_result {
+ public:
+
+  CVRPTW_ping_result(const CVRPTW_ping_result&);
+  CVRPTW_ping_result& operator=(const CVRPTW_ping_result&);
+  CVRPTW_ping_result() : success() {
+  }
+
+  virtual ~CVRPTW_ping_result() throw();
+  std::string success;
+
+  _CVRPTW_ping_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  bool operator == (const CVRPTW_ping_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const CVRPTW_ping_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const CVRPTW_ping_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _CVRPTW_ping_presult__isset {
+  _CVRPTW_ping_presult__isset() : success(false) {}
+  bool success :1;
+} _CVRPTW_ping_presult__isset;
+
+class CVRPTW_ping_presult {
+ public:
+
+
+  virtual ~CVRPTW_ping_presult() throw();
+  std::string* success;
+
+  _CVRPTW_ping_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class CVRPTWClient : virtual public CVRPTWIf {
  public:
   CVRPTWClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -188,6 +284,9 @@ class CVRPTWClient : virtual public CVRPTWIf {
   void solveCVRPTW(Result& _return, const CVRPTWData& data);
   void send_solveCVRPTW(const CVRPTWData& data);
   void recv_solveCVRPTW(Result& _return);
+  void ping(std::string& _return);
+  void send_ping();
+  void recv_ping(std::string& _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -204,10 +303,12 @@ class CVRPTWProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_solveCVRPTW(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   CVRPTWProcessor(boost::shared_ptr<CVRPTWIf> iface) :
     iface_(iface) {
     processMap_["solveCVRPTW"] = &CVRPTWProcessor::process_solveCVRPTW;
+    processMap_["ping"] = &CVRPTWProcessor::process_ping;
   }
 
   virtual ~CVRPTWProcessor() {}
@@ -246,6 +347,16 @@ class CVRPTWMultiface : virtual public CVRPTWIf {
     return;
   }
 
+  void ping(std::string& _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->ping(_return);
+    }
+    ifaces_[i]->ping(_return);
+    return;
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -279,6 +390,9 @@ class CVRPTWConcurrentClient : virtual public CVRPTWIf {
   void solveCVRPTW(Result& _return, const CVRPTWData& data);
   int32_t send_solveCVRPTW(const CVRPTWData& data);
   void recv_solveCVRPTW(Result& _return, const int32_t seqid);
+  void ping(std::string& _return);
+  int32_t send_ping();
+  void recv_ping(std::string& _return, const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
