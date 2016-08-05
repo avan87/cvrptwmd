@@ -18,6 +18,8 @@ namespace operations_research {
 
       static  std::vector<std::vector<int64>>  SolveCVRPTW (Matrix& matrix, int64 num_v, std::string meta_euristic, int64 time);
 
+        static  std::vector<std::vector<int64>>  SolveCVRPTW  (Matrix& matrix, int64 num_v, std::vector<std::vector<int64>> initialSolution ,  std::string meta_euristic, int64 time);
+
        // static  std::vector<std::vector<int64>>  SolveCVRPTW (Matrix& matrix, int64 num_v, int64 lns);
 
         static std::pair<int64, std::vector<std::vector<int64>>> SolveCVRPTW (Matrix& matrix, int64 num_v, FirstSolutionStrategy_Value fss, LocalSearchMetaheuristic_Value);
