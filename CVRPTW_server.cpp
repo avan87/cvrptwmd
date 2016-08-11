@@ -15,6 +15,7 @@
 #include <thrift/server/TNonblockingServer.h>
 #include "main.h"
 #include "utils.h"
+#include "cvrptw_model_types.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -36,23 +37,8 @@ class CVRPTWHandler : virtual public CVRPTWIf {
 
       //get data from Data class
       const std::vector<std::vector<int64_t> > vec = data.vec;
-      //const std::vector<int64_t> & demands = data.demands;
-      //const std::vector<int64_t> & v_caps  = data.v_caps;
-     // const std::vector<std::vector<int64_t> > timeWindows = data.timeWindows;
-      //const std::vector<int64_t>  serviceTime = data.serviceTime;
-      //const std::vector<std::vector<int64_t> > vehWindows = data.vehWindows;
-
-      Utils utils;
-
       int size = vec.size();
-      //int demandSize  = demands.size();
-      //int servTimes = serviceTime.size();
-
       std::vector<int64> v2 (size, 0);
-     // std::vector<long long int> dem (demandSize, 0);
-    //  std::vector<long long int> veh_caps(v_caps.size(),0);
-     // std::vector<long long int > sTime(servTimes, 0);
-
       std::vector<std::vector<int64>> tempVec(size, v2);
 
       for(int i=0; i< tempVec.size(); i++) {
@@ -62,41 +48,23 @@ class CVRPTWHandler : virtual public CVRPTWIf {
         }
       }
 
-
-
-
-//      for(int i=0; i< demandSize; i++) {
-//
-//        dem[i] = demands[i];
-//      }
-
+      //demands
       std::vector<int64> node_demands(data.demands.size());
       std::transform(data.demands.begin(), data.demands.end(),node_demands.begin(), [] (int64_t x) { return (int64) x ;});
 
-
-//      for(int i=0; i< v_caps.size(); i++) {
-//
-//        veh_caps[i] = v_caps[i];
-//      }
-
+      //vehicle capacities
       std::vector<int64> capacity(data.v_caps.size());
       std::transform(data.v_caps.begin(), data.v_caps.end(), capacity.begin(), [] (int64_t x){ return (int64) x ;});
 
-
-//      for(int i=0; i< servTimes; i++) {
-//
-//        sTime[i] = serviceTime[i] ;
-//      }
-//
+      //service times
       std::vector<int64> serviceTimes(data.serviceTime.size());
       std::transform(data.serviceTime.begin(), data.serviceTime.end(), serviceTimes.begin(), [] (int64_t x) {return (int64) x;});
 
-
-      //auto timeW = utils.castToListOfPairs(timeWindows);
-      //auto vWindows = utils.castToListOfPairs(vehWindows);
+      //time windows for nodes
       std::vector<std::pair<int64, int64>>     timeW(data.timeWindows.size());
       std::transform(data.timeWindows.begin(), data.timeWindows.end(), timeW.begin(), [] (std::vector<int64_t > l){ return std::make_pair((int64) l.at(0), (int64) l.at(1));});
 
+      //time windows for vehicles
       std::vector<std::pair<int64, int64>> vWindows(data.vehWindows.size());
       std::transform(data.vehWindows.begin(), data.vehWindows.end(), vWindows.begin(), [] (std::vector<int64_t > l){ return std::make_pair((int64) l.at(0), (int64) l.at(1));} );
 
@@ -105,15 +73,58 @@ class CVRPTWHandler : virtual public CVRPTWIf {
 
       std::vector<std::vector<int64>> cvrp_result;
 
+
+
       if(matrix.getDemands().size() <= 100){
-        cvrp_result = vrpSolver.SolveCVRPTW(matrix, capacity.size(), data.taskType, 90 * 1000);
+        if(data.taskType == "CVRPTW_InitialSolution") {
+
+
+          int size = data.initialSolutions.size();
+          std::vector<int64> v2 (size, 0);
+          std::vector<std::vector<int64>> initSol(size, v2);
+
+          for(int i=0; i< initSol.size(); i++) {
+            for (int j=0;j<initSol[i].size(); j++){
+
+              initSol[i][j] = (int64) vec[i][j];
+            }
+          }
+
+          cvrp_result = vrpSolver.SolveCVRPTW(matrix, capacity.size(), initSol ,data.taskType, 90 * 1000);
+        }
+        else {
+          cvrp_result = vrpSolver.SolveCVRPTW(matrix, capacity.size(),  data.taskType, 90 * 1000);
+        }
       }
 
       if(matrix.getDemands().size()  > 100) {
-        cvrp_result = vrpSolver.SolveCVRPTW(matrix, capacity.size(), data.taskType,
-                                            (int64) ((matrix.getDemands().size() / 100) * 60 + 60) *
-                                            1000);
+        if(data.taskType == "CVRPTW_InitialSolution") {
+
+
+          int size = data.initialSolutions.size();
+          std::vector<int64> v2 (size, 0);
+          std::vector<std::vector<int64>> initSol(size, v2);
+
+          for(int i=0; i< initSol.size(); i++) {
+            for (int j=0;j<initSol[i].size(); j++){
+
+              initSol[i][j] = (int64) vec[i][j];
+            }
+          }
+
+          cvrp_result = vrpSolver.SolveCVRPTW(matrix, capacity.size(), data.taskType,
+                                              (int64) ((matrix.getDemands().size() / 100) * 60 + 60) *
+                                              1000);
+        }
+        else {
+          cvrp_result = vrpSolver.SolveCVRPTW(matrix, capacity.size(), data.taskType,
+                                              (int64) ((matrix.getDemands().size() / 100) * 60 + 60) *
+                                              1000);
+        }
+
       }
+
+
       std::vector<std::vector<int64_t >> result;
 
       for(int i=0; i< cvrp_result.size(); i++) {
@@ -135,61 +146,50 @@ class CVRPTWHandler : virtual public CVRPTWIf {
     if(data.taskType.find("CVRPTWMD_") != std::string::npos)  {
 
       //get data from Data class
+      //get data from Data class
       const std::vector<std::vector<int64_t> > vec = data.vec;
-      const std::vector<int64_t> & demands = data.demands;
-      const std::vector<int64_t> & v_caps  = data.v_caps;
-      const std::vector<std::vector<int64_t> > timeWindows = data.timeWindows;
-      const std::vector<int64_t>  serviceTime = data.serviceTime;
-      const std::vector<std::vector<int64_t> > vehWindows = data.vehWindows;
-      const std::vector<std::vector<int64_t>> depots = data.depots;
-
-      Utils utils;
-
       int size = vec.size();
-      int demandSize  = demands.size();
-      int servTimes = serviceTime.size();
-
-      std::vector<long long int> v2 (size, 0);
-      std::vector<long long int> dem (demandSize, 0);
-      std::vector<long long int> veh_caps(v_caps.size(),0);
-      std::vector<long long int > sTime(servTimes, 0);
-
-      std::vector<std::vector<long long int>> tempVec(size, v2);
+      std::vector<int64> v2 (size, 0);
+      std::vector<std::vector<int64>> tempVec(size, v2);
 
       for(int i=0; i< tempVec.size(); i++) {
         for (int j=0;j<tempVec[i].size(); j++){
 
-          tempVec[i][j] = (long long int) vec[i][j];
+          tempVec[i][j] = (int64) vec[i][j];
         }
       }
 
+      //demands
+      std::vector<int64> node_demands(data.demands.size());
+      std::transform(data.demands.begin(), data.demands.end(),node_demands.begin(), [] (int64_t x) { return (int64) x ;});
 
-      for(int i=0; i< demandSize; i++) {
+      //vehicle capacities
+      std::vector<int64> capacity(data.v_caps.size());
+      std::transform(data.v_caps.begin(), data.v_caps.end(), capacity.begin(), [] (int64_t x){ return (int64) x ;});
 
-        dem[i] = demands[i];
-      }
+      //service times
+      std::vector<int64> serviceTimes(data.serviceTime.size());
+      std::transform(data.serviceTime.begin(), data.serviceTime.end(), serviceTimes.begin(), [] (int64_t x) {return (int64) x;});
 
+      //time windows for nodes
+      std::vector<std::pair<int64, int64>>     timeW(data.timeWindows.size());
+      std::transform(data.timeWindows.begin(), data.timeWindows.end(), timeW.begin(), [] (std::vector<int64_t > l){ return std::make_pair((int64) l.at(0), (int64) l.at(1));});
 
-      for(int i=0; i< v_caps.size(); i++) {
-
-        veh_caps[i] = v_caps[i];
-      }
-
-
-      for(int i=0; i< servTimes; i++) {
-
-        sTime[i] = serviceTime[i] ;
-      }
-
-      std::vector<std::pair<int64, int64>> timeW = utils.castToListOfPairs(timeWindows);
-      std::vector<std::pair<int64, int64>> vWindows = utils.castToListOfPairs(vehWindows);
-      std::vector<std::pair<int64, int64>> deps  = utils.castToListOfPairs(depots);
+      //time windows for vehicles
+      std::vector<std::pair<int64, int64>> vWindows(data.vehWindows.size());
+      std::transform(data.vehWindows.begin(), data.vehWindows.end(), vWindows.begin(), [] (std::vector<int64_t > l){ return std::make_pair((int64) l.at(0), (int64) l.at(1));} );
 
 
-      operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime, vWindows, deps);
+      std::vector<std::pair<int64, int64>> depots(data.depots.size());
+      std::transform(data.depots.begin(), data.depots.end(), depots.begin(), [] (std::vector<int64_t > l) { return std::make_pair((int64) l.at(0), (int64) l.at(1));});
+
+      //std::vector<std::pair<int64, int64>> deps  = utils.castToListOfPairs(depots);
+
+
+      operations_research::Matrix matrix(tempVec, node_demands, capacity, timeW, serviceTimes, vWindows, depots);
       operations_research::CVRPTWSolver vrpSolver;
 
-      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTWMD(matrix, veh_caps.size(), data.taskType,(int64) ((matrix.getDemands().size() / 100 * 2) * 60 + 60) *
+      std::vector<std::vector<int64>> cvrp_result = vrpSolver.SolveCVRPTWMD(matrix, capacity.size(), data.taskType,(int64) ((matrix.getDemands().size() / 100 * 2) * 60 + 60) *
                                                                                                                    1000);
       std::vector<std::vector<int64_t >> result;
 
@@ -288,64 +288,51 @@ class CVRPTWHandler : virtual public CVRPTWIf {
 
     if(data.taskType == "CVRPTWPnD"){
 
-      Utils utils;
-
       //get data from Data class
       const std::vector<std::vector<int64_t> > vec = data.vec;
-      const std::vector<int64_t> & demands = data.demands;
-      const std::vector<int64_t> & v_caps  = data.v_caps;
-      const std::vector<std::vector<int64_t> > timeWindows = data.timeWindows;
-      const std::vector<int64_t>  serviceTime = data.serviceTime;
-      const std::vector<std::vector<int64_t> > vehWindows = data.vehWindows;
-      std::vector<int64> deliveries = utils.castList(data.deliveries);
-      std::vector<int64> pickups = utils.castList(data.pickups);
-
-
-
       int size = vec.size();
-      int demandSize  = demands.size();
-      int servTimes = serviceTime.size();
-
-      std::vector<long long int> v2 (size, 0);
-      std::vector<long long int> dem (demandSize, 0);
-      std::vector<long long int> veh_caps(v_caps.size(),0);
-      std::vector<long long int > sTime(servTimes, 0);
-
-      std::vector<std::vector<long long int>> tempVec(size, v2);
+      std::vector<int64> v2 (size, 0);
+      std::vector<std::vector<int64>> tempVec(size, v2);
 
       for(int i=0; i< tempVec.size(); i++) {
         for (int j=0;j<tempVec[i].size(); j++){
 
-          tempVec[i][j] = (long long int) vec[i][j];
+          tempVec[i][j] = (int64) vec[i][j];
         }
       }
 
+      //demands
+      std::vector<int64> node_demands(data.demands.size());
+      std::transform(data.demands.begin(), data.demands.end(),node_demands.begin(), [] (int64_t x) { return (int64) x ;});
 
-      for(int i=0; i< demandSize; i++) {
+      //vehicle capacities
+      std::vector<int64> capacity(data.v_caps.size());
+      std::transform(data.v_caps.begin(), data.v_caps.end(), capacity.begin(), [] (int64_t x){ return (int64) x ;});
 
-        dem[i] = demands[i];
-      }
+      //service times
+      std::vector<int64> serviceTimes(data.serviceTime.size());
+      std::transform(data.serviceTime.begin(), data.serviceTime.end(), serviceTimes.begin(), [] (int64_t x) {return (int64) x;});
+
+      //time windows for nodes
+      std::vector<std::pair<int64, int64>>     timeW(data.timeWindows.size());
+      std::transform(data.timeWindows.begin(), data.timeWindows.end(), timeW.begin(), [] (std::vector<int64_t > l){ return std::make_pair((int64) l.at(0), (int64) l.at(1));});
+
+      //time windows for vehicles
+      std::vector<std::pair<int64, int64>> vWindows(data.vehWindows.size());
+      std::transform(data.vehWindows.begin(), data.vehWindows.end(), vWindows.begin(), [] (std::vector<int64_t > l){ return std::make_pair((int64) l.at(0), (int64) l.at(1));} );
+
+      std::vector<int64> deliveries(data.deliveries.size());
+      std::transform(data.deliveries.begin(), data.deliveries.end(), deliveries.begin(), [] (int64_t x) { return (int64) x;});
+
+      std::vector<int64> pickups(data.pickups.size());
+      std::transform(data.pickups.begin(), data.pickups.end(), pickups.begin(), [] (int64_t x) { return (int64) x;});
 
 
-      for(int i=0; i< v_caps.size(); i++) {
-
-        veh_caps[i] = v_caps[i];
-      }
-
-
-      for(int i=0; i< servTimes; i++) {
-
-        sTime[i] = serviceTime[i] ;
-      }
-
-      auto timeW = utils.castToListOfPairs(timeWindows);
-      auto vWindows = utils.castToListOfPairs(vehWindows);
-
-      operations_research::Matrix matrix(tempVec, dem, veh_caps, timeW, sTime, vWindows ,deliveries, pickups);
+      operations_research::Matrix matrix(tempVec, node_demands, capacity, timeW, serviceTimes, vWindows ,deliveries, pickups);
       operations_research::CVRPTWSolver vrpSolver;
 
 
-      auto cvrp_result = vrpSolver.SolveCVRPTWPnD(matrix, veh_caps.size(), data.taskType, (matrix.getDemands().size() /100 * 60 + 60) * 1000);
+      auto cvrp_result = vrpSolver.SolveCVRPTWPnD(matrix, capacity.size(), data.taskType, (matrix.getDemands().size() /100 * 60 + 60) * 1000);
       std::vector<std::vector<int64_t >> result;
 
       for(int i=0; i< cvrp_result.size(); i++) {
