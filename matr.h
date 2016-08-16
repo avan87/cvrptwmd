@@ -67,6 +67,11 @@ namespace operations_research  {
 
         std::vector<std::pair<int64, int64>> getVehTimeWindows();
 
+
+        const vector<int64> &getVcaps() const {
+            return vcaps;
+        }
+
     private:
 
         int64 MatrixIndex(RoutingModel::NodeIndex from, RoutingModel::NodeIndex to) const;

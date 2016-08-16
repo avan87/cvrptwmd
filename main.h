@@ -6,6 +6,7 @@
 #define CVRP_MAIN_H
 
 #include "constraint_solver/routing.h"
+#include "constraint_solver/routing_parameters.pb.h"
 #include "matr.h"
 
 namespace operations_research {

@@ -22,18 +22,20 @@
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
-          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
-          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
           <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
           <root url="file:///usr/local/include" />
-          <root url="file://$USER_HOME$/Desktop/ortools/or-tools.Linux64/include" />
+          <root url="file://$USER_HOME$/ort-tools-master/or-tools-master/src" />
+          <root url="file://$USER_HOME$/ort-tools-master/or-tools-master/dependencies/install/include" />
         </CLASSES>
         <SOURCES>
-          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
-          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
           <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
           <root url="file:///usr/local/include" />
-          <root url="file://$USER_HOME$/Desktop/ortools/or-tools.Linux64/include" />
+          <root url="file://$USER_HOME$/ort-tools-master/or-tools-master/src" />
+          <root url="file://$USER_HOME$/ort-tools-master/or-tools-master/dependencies/install/include" />
         </SOURCES>
       </library>
     </orderEntry>

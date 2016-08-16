@@ -7,13 +7,16 @@ namespace operations_research{
 
 
     Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities)
+
+    :size(vec.size()), dems(demands), vcaps(v_capacities)
+
+
     {
-        this->size = vec.size();
+
 
         this->matrix_.reset(new int64[size * size]);
 
-        this->dems = demands;
-        this->vcaps = v_capacities;
+
 
 
         for (RoutingModel::NodeIndex from = RoutingModel::kFirstNode; from < size;
@@ -36,16 +39,17 @@ namespace operations_research{
     Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities,
                    std::vector<std::pair<int64, int64>> timeWindows, std::vector<int64> serviceTime,
                    std::vector<std::pair<int64, int64>> vehWindows)
+    : size(vec.size()), vehWindows(vehWindows), dems(demands), vcaps(v_capacities), timeWindows(timeWindows), serviceTime(serviceTime), horizon(timeWindows.at(0).second)
     {
         this->size = vec.size();
 
         this->matrix_.reset(new int64[size * size]);
-        this->vehWindows = vehWindows;
-        this->dems = demands;
-        this->vcaps = v_capacities;
-        this->timeWindows = timeWindows;
-        this->serviceTime = serviceTime;
-        this->horizon = this->timeWindows.at(0).second;
+        //this->vehWindows = vehWindows;
+       // this->dems = demands;
+       // this->vcaps = v_capacities;
+       // this->timeWindows = timeWindows;
+       // this->serviceTime = serviceTime;
+        //this->horizon = this->timeWindows.at(0).second;
 
 
         for (RoutingModel::NodeIndex from = RoutingModel::kFirstNode; from < size;
@@ -65,16 +69,22 @@ namespace operations_research{
 
 
     Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64 > v_capacities, std::vector<std::pair<int64, int64>> timeWindows,
-            std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows , std::vector<std::pair<int64, int64>> depots){
+            std::vector<int64> serviceTime, std::vector<std::pair<int64, int64>> vehWindows , std::vector<std::pair<int64, int64>> depots)
+
+            : size(vec.size()), vehWindows(vehWindows),
+              dems(demands), vcaps(v_capacities), timeWindows(timeWindows),
+              serviceTime(serviceTime), horizon(timeWindows.at(0).second)
+
+    {
 
         this->size = vec.size();
 
         this->matrix_.reset(new int64[size * size]);
-        this->vehWindows = vehWindows;
-        this->dems = demands;
-        this->vcaps = v_capacities;
-        this->timeWindows = timeWindows;
-        this->serviceTime = serviceTime;
+        //this->vehWindows = vehWindows;
+       // this->dems = demands;
+       // this->vcaps = v_capacities;
+        //this->timeWindows = timeWindows;
+        //this->serviceTime = serviceTime;
 
         std::vector<std::pair<int64, int64>>::iterator first = timeWindows.begin() + 0;
         std::vector<std::pair<int64, int64>>::iterator last = timeWindows.begin() + 10;
@@ -166,19 +176,23 @@ namespace operations_research{
     Matrix::Matrix(std::vector<std::vector<int64>> &vec, std::vector<int64> demands, std::vector<int64> v_capacities,
                    std::vector<std::pair<int64, int64>> timeWindows, std::vector<int64> serviceTime,
                    std::vector<std::pair<int64, int64>> vehWindows, std::vector<int64> deliveries,
-                   std::vector<int64> pickups) {
+                   std::vector<int64> pickups)
+    : vehWindows(vehWindows), dems(demands), vcaps(v_capacities), timeWindows(timeWindows),
+      serviceTime(serviceTime),
+      deliveries(deliveries), pickups(pickups), horizon(timeWindows.at(0).second)
+    {
 
         this->size = vec.size();
 
         this->matrix_.reset(new int64[size * size]);
-        this->vehWindows = vehWindows;
-        this->dems = demands;
-        this->vcaps = v_capacities;
-        this->timeWindows = timeWindows;
-        this->serviceTime = serviceTime;
-        this->deliveries = deliveries;
-        this->pickups = pickups;
-        this->horizon = timeWindows.at(0).second;
+        //this->vehWindows = vehWindows;
+       // this->dems = demands;
+       // this->vcaps = v_capacities;
+       // this->timeWindows = timeWindows;
+       // this->serviceTime = serviceTime;
+       // this->deliveries = deliveries;
+       // this->pickups = pickups;
+       // this->horizon = timeWindows.at(0).second;
 
 
         for (RoutingModel::NodeIndex from = RoutingModel::kFirstNode; from < size;
